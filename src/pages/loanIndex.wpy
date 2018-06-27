@@ -1,0 +1,168 @@
+<style lang="less">
+.loan-page {
+  .wrapper {
+    .title {
+      width: 15%;
+      >view {
+        font-size: 16px;
+        color: #fff;
+        text-align: center;
+      }
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="loan-page">
+    <view class="wrapper">
+      <view class="title">
+        <view class="round">裕</view>
+        <view>丰</view>
+        <view>裕</view>
+        <view>贷</view>
+      </view>
+      <view class="content">
+        <view class="required">
+          <text>需短期流动资金用于农林牧渔生产物资、工人、设备等方面的</text>
+          <text class="emphasis">加工企业、合作社、农场及种养殖大户</text>
+        </view>
+        <view class="limit">借款额度： 1万 - 100万元</view>
+        <view class="todetail">查看详情</view>
+        <image src="../assets/img/loan-1.jpg"></image>
+      </view>
+    </view>
+    <view class="wrapper">
+      <view class="title">
+        <view class="round">乐</view>
+        <view>丰</view>
+        <view>乐</view>
+        <view>贷</view>
+      </view>
+      <view class="content">
+        <view class="required">
+          <text>盖房、装修、嫁娶、购车、置办家私家电等方面有借款需求的</text>
+          <text class="emphasis">农村个人</text>
+        </view>
+        <view class="limit">借款额度： 1000 - 20万元</view>
+        <view class="todetail">查看详情</view>
+        <image src="../assets/img/loan-1.jpg"></image>
+      </view>
+    </view>
+    <view class="wrapper">
+      <view class="title">
+        <view class="round">新</view>
+        <view>新</view>
+        <view>农</view>
+        <view>贷</view>
+      </view>
+      <view class="content">
+        <view class="required">
+          <text>金新农私聊经销商</text>
+          <text class="emphasis">金新农下游养猪户</text>
+        </view>
+        <view class="limit">借款额度： 20万 - 100万元</view>
+        <view class="todetail">查看详情</view>
+        <image src="../assets/img/loan-1.jpg"></image>
+      </view>
+    </view>
+        <view class="wrapper">
+      <view class="title">
+        <view class="round">盟</view>
+        <view>加</view>
+        <view>盟</view>
+        <view>贷</view>
+      </view>
+      <view class="content">
+        <view class="required">
+          <text>有终端加盟需求的经销商</text>
+          <text class="emphasis"></text>
+        </view>
+        <view class="limit">借款额度： 3万 - 50万元</view>
+        <view class="todetail">查看详情</view>
+        <image src="../assets/img/loan-1.jpg"></image>
+      </view>
+    </view>
+    <view class="wrapper">
+      <view class="title">
+        <view class="round mini">扶</view>
+        <view>精</view>
+        <view>准</view>
+        <view>扶</view>
+        <view>贫</view>
+        <view>贷</view>        
+      </view>
+      <view class="content">
+        <view class="required">
+          <text>需生产经营资金，用于符合精准扶贫项目要求的农产品加工企业、农业专业合作社、家庭农场及种植养殖大户。</text>
+          <text class="emphasis"></text>
+        </view>
+        <view class="limit">借款额度： 1万 - 100万元</view>
+        <view class="todetail">查看详情</view>
+        <image src="../assets/img/loan-1.jpg"></image>
+      </view>
+    </view>
+    <view class="wrapper">
+      <view class="title">
+        <view class="round">随</view>
+        <view>随</view>
+        <view>手</view>
+        <view>贷</view>
+      </view>
+      <view class="content">
+        <view class="required">
+          <text>随手购终端超市</text>
+          <text class="emphasis"></text>
+        </view>
+        <view class="limit">借款额度： 100 - 20万元</view>
+        <view class="todetail">查看详情</view>
+        <image src="../assets/img/loan-1.jpg"></image>
+      </view>
+    </view>
+    <view class="wrapper">
+      <view class="title">
+        <view class="round">订</view>
+        <view>定</view>
+        <view>单</view>
+        <view>贷</view>
+      </view>
+      <view class="content">
+        <view class="required">
+          <text>随手购平台商</text>
+          <text class="emphasis"></text>
+        </view>
+        <view class="limit">借款额度： 1万 - 100万元</view>
+        <view class="todetail">查看详情</view>
+        <image src="../assets/img/loan-1.jpg"></image>
+      </view>
+    </view>
+    <view class="wrapper">
+      <view class="title">
+        <view class="round">飞</view>
+        <view>新</view>
+        <view>和</view>
+        <view>莱</view>
+        <view>特</view>
+        <view>贷</view>
+      </view>
+      <view class="content">
+        <view class="required">
+          <text>新和莱特植保设备采购客户</text>
+          <text class="emphasis"></text>
+        </view>
+        <view class="limit">借款额度： 1万 - 20万元</view>
+        <view class="todetail">查看详情</view>
+        <image src="../assets/img/loan-1.jpg"></image>
+      </view>
+    </view>    
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class loanIndex extends wepy.page {
+  config = {
+    navigationBarTitleText: '借款产品'
+  }
+}
+</script>

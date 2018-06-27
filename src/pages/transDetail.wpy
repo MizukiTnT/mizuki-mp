@@ -1,0 +1,320 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+  .trans-detail {
+    margin-bottom: 60px;
+    background-color: @border-color-sub;
+    .em {
+      color: @color-emphasis;
+      font-size: 16px;
+    }
+    .trans-profit {
+      position: relative;
+      .profit {
+        position: absolute;
+        top: 10rpx;
+        width: 100%;
+        text-align: center;
+        font-size: 40px;
+        color: #fff;
+        text {
+          font-size: 20px;
+        }
+      }
+      .text {
+        position: absolute;
+        bottom: 45rpx;
+        width: 100%;        
+        font-size: 20px;
+        color: #fff;
+        text-align: center;
+      }
+      .bg {
+        width: 100%;
+        height: 200rpx;
+      }      
+    }
+    .detail {
+      background-color: #fff;
+      font-size: 13px;
+      color: @color-normal;
+      .float {
+        border-bottom: 1px solid @border-color-sub;
+        >view {
+          display: inline-block;
+          padding: 15rpx 0 15rpx 25rpx;
+          box-sizing: border-box;
+        }
+        .large {
+          width: 60%;
+        }
+        .mini {
+          width: 40%;
+        }
+      }
+    }
+    .info {
+      background-color: #fff;
+      .repay {
+        padding: 10rpx 0;
+        font-size: 14px;
+        color: @color-normal;
+        >view {
+          display: inline-block;
+          width: 50%;
+          padding-left: 35rpx;
+          box-sizing: border-box;
+          image {
+            width: 35rpx;
+            height: 35rpx;
+            margin-right: 10rpx;
+            vertical-align: top;
+          }
+        }
+      }
+      .person {
+        margin: 10rpx 10rpx 15rpx;
+        font-size: 16px;
+        color: @color-normal;
+        .title {
+          padding-left: 35rpx;
+        }
+        .content {
+          padding: 15rpx 20rpx;
+          .avatar-wrapper {
+            display: inline-block;
+            text-align: center;
+            width: 35%;
+            .avatar {
+              border: 1px solid @color-emphasis;
+              width: 120rpx;
+              height: 120rpx;
+              border-radius: 50%;
+            }
+          }
+          .left-side {
+            display: inline-block;
+            width: 65%;
+            >view {
+              margin-bottom: 20rpx;
+            }
+            .black {
+              margin-bottom: 10rpx;
+              color: @color-main;
+            }
+          }
+          .tobid {
+            display: inline-block;
+            width: 100%;
+            border-top: 1px solid @border-color-sub;
+            padding: 15rpx 35rpx 5rpx;
+            box-sizing: border-box;
+            .arrow {
+              position: relative;
+              top: 10rpx;
+              float: right;
+              width: 14rpx;
+              height: 25rpx;
+            }
+          }
+        }        
+      }
+    }
+    .balance {
+      background-color: #fff;
+      >view {
+        position: relative;
+        padding: 25rpx;
+        font-size: 14px;
+        color: @color-normal;
+        border-bottom: 1px solid @border-color-sub;
+        .button {
+          position: absolute;
+          right: 35rpx;
+          top: 25rpx;
+          padding: 3rpx 15rpx;
+          background-color: @color-emphasis;
+          color: #fff;
+          font-size: 13px;
+          border-radius: 3px;
+        }
+      }
+    }
+    .contract {
+        text-align: center;
+        .icon {
+            width: 30rpx;
+            height: 30rpx;
+            margin-right: 15rpx;
+            vertical-align: middle;
+        }
+        .inline {
+            display: inline-block;
+            font-size: 11px;
+            color: @color-sub;
+            letter-spacing: .5px;
+            >navigate {
+                color: @color-emphasis;
+                font-size: 14px;
+            }
+        }
+        .notice {
+            font-size: 11px;
+            color: @color-sub;      
+            letter-spacing: .5px;                         
+        }
+    }
+    .calculate {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        height: 100rpx;
+        width: 100%;
+        padding: 0 45rpx 0 110rpx;
+        box-sizing: border-box;
+        background-color: #fff;
+        border-top: 1px solid @border-color-main;
+        .cal {
+            width: 50rpx;
+            height: 50rpx;
+            position: absolute;
+            top: 25rpx;
+            left: 45rpx;
+        }
+        .button-wrapper {
+            position: relative;
+            top: 20rpx;
+            width: 100%;
+            display: inline-block;
+            .invest {
+                font-size: 14px;
+                height: 60rpx;
+                line-height: 60rpx;
+                background-color: #fd5353;
+            }
+        }
+    }
+  }
+</style>
+
+<template>
+  <view class="trans-detail">
+    <view class="trans-profit">
+      <view class="profit">805<text>元</text></view>
+      <view class="text">让利</view>
+      <image class="bg" src="../assets/img/trans-bg.png"></image>
+    </view>
+    <view class="detail">
+      <view class="float">
+        <view class="large">转让价格：<text class="em">98000</text>元</view>
+        <view class="mini">剩余期限： <text class="em">111</text>天</view>
+      </view>
+      <view class="float">
+        <view class="large">本息合计：<text class="em">98000</text>元</view>
+        <view class="mini">预计年化： <text class="em">10.8</text>%</view>
+      </view>
+      <view class="float">
+        <view class="large">债权本金：<text class="em">80220.2</text>元
+        </view>
+      </view>
+    </view>
+    <view class="info">
+      <view class="repay">
+        <view>
+          <image src="../assets/img/lai-calender.png"></image>
+          <text>还款日期： <text class="em"></text></text>
+        </view>
+        <view>
+          <image src="../assets/img/oclock.png"></image>
+          <text>倒计时： 12时23分33秒</text>
+        </view>
+      </view>
+      <view class="person">
+        <view class="title">转让人信息</view>
+        <view class="content">
+          <view class="avatar-wrapper">
+            <image class="avatar" src=""></image>
+          </view>
+          <view class="left-side">
+            <view class="black">3232</view>
+            <view>发布日期： 23232</view>
+            <view>还款方式：一次性还款</view>
+          </view>
+          <naviagtor class="tobid" url="">
+            <text>原标详情</text>
+            <image class="arrow" src="../assets/img/arrow.png"></image>
+          </naviagtor>
+        </view>
+      </view>
+    </view>
+    <view class="balance">
+      <view>
+        可用余额：<text class="em">0.3232</text>元
+        <view class="button">充值</view>
+      </view>
+      <view>预期收益：<text class="em">213213</text>元</view>
+    </view>
+    <view></view>
+    <view class="contract">
+        <view> 
+            <image src="../assets/img/bid-yes.png" class="icon"></image>
+            <view class="inline">同意成功后自动生成《<navigate url="">理财合同</navigate>》</view>
+        </view>
+        <view class="notice">来融金服提醒您：投资有风险，理财需谨慎</view>
+    </view>    
+    <view class="calculate">
+      <image @tap="openCal" class="cal" src="../assets/img/bid-cal.png"></image>    
+      <view class="button-wrapper">
+        <button class="invest" type="warn">投标</button>
+      </view>
+    </view>
+    <cal :isHidden.sync="isHidden" :profit="calProfit" :time="time" :timeType="timeType"></cal>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import cal from '../components/calculate'
+  export default class transDetail extends wepy.page {
+    config = {
+      enablePullDownRefresh: true
+    }
+    components = {
+      cal
+    }
+    data = {
+      isHidden: true,
+      bidInfo: {
+        bidId: '12122',
+        minInvest: 100,
+        investAmount: 30,
+        time: 10,
+        profit: '10.8%',
+        aviableAmount: 1000,
+        maxInvest: 10000,
+        timeType: 'month'
+      }
+    }
+    methods = {
+      openCal() {
+        this.isHidden = false
+        console.log(this.isHidden)
+        this.$apply()
+      }
+    }
+    computed = {
+      // 传给计算器内容
+      timeType() {
+        return this.bidInfo.timeType
+      },
+      time() {
+        return this.bidInfo.time
+      },
+      calProfit() {
+        return this.bidInfo.profit
+      }
+    }
+    onLoad() {
+
+    }
+  }
+</script>

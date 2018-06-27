@@ -1,0 +1,200 @@
+<style lang="less">
+  page {
+    height: 100%;
+    background-color: #f7f7f7;
+    .lai-wrapper {
+      .header {
+        position: relative;
+        padding: 100rpx 0;
+        background-color: #f98183;
+        text-align: center;
+        .bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+        .avatar {
+          position: relative;
+          image {
+            display: inline-block;
+            width: 110rpx;
+            height: 110rpx;
+            border-radius: 50%;
+          }
+          .text {
+            font-size: 12px;
+            color: #fff;
+          }
+        }
+        .text {
+          position: relative;
+          margin-top: 30rpx;
+          .text-item {
+            width: 50%;
+            display: inline-block;
+            color: #fff;
+            font-size: 0;
+            >view {
+              margin-top: 20rpx;
+              font-size: 13px;
+            }
+          }
+        }
+      }
+    }
+    .grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      .grid-item {
+        margin-bottom: 30rpx;
+        padding: 30rpx 0;
+        flex: 1 0 33.33%;
+        border-right: 1px solid #DCDFE6;
+        font-size: 0;
+        text-align: center;
+        background-color: #fff;
+        box-sizing: border-box;
+        box-shadow: 0 0 5px rbga(0,0,0,.2);
+        image {
+          display: inline-block;
+          width: 50rpx;
+          height: 50rpx;
+        }
+        >view {
+          margin-top: 20rpx;
+          font-size: 14px;
+        }
+      }
+    }
+    .notice {
+      font-size: 12px;
+      color: #909399;
+      text-align: center;
+      >text {
+        color: #fd5353;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="lai-wrapper">
+    <!-- 顶部信息 _S -->
+    <view class="header">
+      <view class="avatar">
+        <image src=""></image>
+        <view></view>
+      </view>
+      <view class="text">
+        <view class="text-item">
+          <view></view>
+          <view>昨日奖励（元）</view>
+        </view>
+        <view class="text-item">
+          <view></view>
+          <view>累积奖励（元）</view>
+        </view>
+      </view>
+      <image class="bg" src="../assets/img/lai-bg.png"></image>
+    </view>
+    <!-- 顶部信息 _S -->
+    <!-- 按钮 _S -->
+    <view class="grid">
+      <navigator url="./friendsCount" class="grid-item">
+        <image src="../assets/img/lai-friends.png"></image>
+        <view>好友统计</view>
+      </navigator>
+      <view class="grid-item">
+        <image src="../assets/img/lai-notbook.png"></image>
+        <view>奖励规则</view>
+      </view>
+      <navigator url="./awards" class="grid-item">
+        <image src="../assets/img/lai-calender.png"></image>
+        <view>奖励记录</view>
+      </navigator>
+      <view @tap="showCopy" class="grid-item">
+        <image src="../assets/img/lai-awards.png"></image>
+        <view>邀请码</view>
+      </view>
+      <view @tap="showShare" class="grid-item">
+        <image src="../assets/img/lai-output.png"></image>
+        <view>推广链接</view>
+      </view>
+      <view @tap="showCode" class="grid-item">
+        <image src="../assets/img/lai-code.png"></image>
+        <view>微信二维码</view>
+      </view>
+    </view>
+    <!-- 按钮 _E -->
+    <view class="notice"><text>* </text>可通过以上三种方式邀请好友加入</view>
+    <!-- 隐藏图层 _S -->
+    <tologin hidden="{{isLogin}}"></tologin>
+    <!-- 隐藏图层 _E -->
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tologin from '../components/toLogin'
+  import tips from '../utils/tips'
+  import {LOGIN_CONDITION} from '../utils/constant'
+  export default class laifriends extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的来友'
+    }
+    data = {
+      userInfo: null,
+      isLogin: true
+    }
+    components = {
+      tologin
+    }
+    methods = {
+      showCopy() {
+        let that = this
+        tips.confirm('好友注册时 请他填写下面的邀请码: ' + that.userInfo.phoneNumber, '复制', '邀请码').then((v) => {
+          wepy.setClipboardData({
+            data: that.userInfo.phoneNumber
+          })
+          tips.success('已复制')
+        }).catch(() => {
+          console.log('reject')
+        })
+      },
+      showCode() {},
+      showShare() { // 实现分享功能要请求接口 从后台拿到图片url存到本地 这个等有条件的时候再做
+        tips.confirm('小程序将被发送给好友或者分享到朋友圈', '分享', '推广链接').then((v) => {
+
+        }).catch(() => {
+          console.log('reject')
+        })
+      }
+    }
+    async onLoad() {
+      // 获取是否登录
+      // let loginCondition = await wepy.getStorageSync(LOGIN_CONDITION) || false
+      // if (!loginCondition) {
+      //   this.isLogin = false
+      // } else {
+      //   this.isLogin = true
+      // }
+
+      this.userInfo = {}
+      this.userInfo.phoneNumber = '151515551'
+      this.$apply()
+    }
+    async onShow() {
+      let loginCondition = await wepy.getStorageSync(LOGIN_CONDITION) || false
+      // if (!loginCondition) {
+      //   this.isLogin = false
+      // } else {
+      //   this.isLogin = true
+      // }
+      this.$apply()
+    }
+  }
+</script>

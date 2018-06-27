@@ -1,0 +1,179 @@
+<style lang="less">
+page {
+  height: 100%;
+  .card-wrapper {
+    height: 100%;
+    padding: 30rpx 40rpx;
+    background-color: #f7f7f7;
+    box-sizing: border-box;
+    .card {
+      position: relative;
+      padding: 0 15rpx;
+      background-color: #fff;
+      border-radius: 3px;
+      box-shadow: 0 2px 3px rgba(0,0,0,.3);
+      .header {
+        position: relative;
+        z-index: 10;
+        padding: 10rpx 30rpx;
+        border-bottom: 1px solid #f7f7f7;
+        .name {
+          display: inline-block;
+          margin-right: 50rpx;
+          font-size: 12px;
+          line-height: 30rpx;
+          image {
+            width: 30rpx;
+            height: 30rpx;
+            margin-right: 10rpx;
+            vertical-align: top;
+          }
+        }
+        .id {
+          display: inline-block;
+          font-size: 12px;
+          color: #606266;
+          image {
+            width: 40rpx;
+            height: 32rpx;
+            margin-right: 15rpx;
+            vertical-align: top;
+          }
+        }
+        .icon {
+          width: 30rpx;
+          height: 30rpx;
+          display: inline-block;
+          margin-right: 10rpx;
+        }
+        .bank-name {
+          font-size: 13px;
+        }
+      }
+      .content {
+        padding: 30rpx 15rpx;
+        display: flex;
+        position: relative;
+        z-index: 10;
+        align-items: center;
+        image {
+          display: inline-block;
+          width: 130rpx;
+          height: 123rpx;
+          margin-right: 30rpx;
+          vertical-align: middle;
+        }
+        .card-number {
+          font-size: 15px;
+        }
+        .button {
+          position: absolute;
+          right: 15rpx;
+          padding: 4rpx 20rpx;
+          font-size: 13px;
+          color: #fff;
+          background-color: #409EFF;
+          border-radius: 3px;
+        }
+        .cardNumber {
+          display: inline-block;
+          font-size: 15px;
+          view {
+            &:last-child {
+              margin-top: 8rpx;
+            }
+          }
+        }
+      }
+      .bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: .5;
+      }
+    }
+  }
+}
+
+</style>
+
+<template>
+<view class="card-wrapper">
+  <view class="card jiangxi-bank" wx:if="{{cardType == 1 }}">
+    <view class="header">
+      <view class="name">
+        <image src="../assets/img/person.png"></image>
+        <text>{{userInfo.jiangxiBank.name}}</text>
+      </view>
+      <view class="id">
+        <image src="../assets/img/idcard.png"></image>
+        <text>{{userInfo.jiangxiBank.idNumber}}</text>
+      </view>
+    </view>
+    <view class="content">
+      <image src="../assets/img/jiangxibank.png" class="icon"></image>
+      <view class="cardNumber">
+        <view>江西银行电子账户</view>
+        <view>{{userInfo.jiangxiBank.cardNumber}}</view>
+      </view>
+    </view>
+    <image class="bg" src="../assets/img/jiangxibg.png"></image>
+  </view>
+  <view class="card bankcard" wx:if="{{cardType == 2}}">
+    <view class="header">
+      <image class="icon" src="{{}}"></image>
+      <text class="bank-name">{{userInfo.bankCard.name}}</text>
+    </view>
+    <view class="content">
+      <text class="card-number">{{userInfo.bankCard.number}}</text>
+      <text class="button" @tap="cancelCard">解绑</text>
+    </view>
+    <image class="bg" src="../assets/img/bankbg.png"></image>
+  </view>
+</view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import tips from '../utils/tips'
+    export default class cards extends wepy.page {
+      data = {
+        userInfo: {
+          jiangxiBank: {
+            name: '聂航斌',
+            cardNumber: '6552184523515471111',
+            idNumber: '360313199407280034'
+          },
+          bankCard: {
+            name: '中国农业银行',
+            number: '6228481586010273164'
+          }
+        },
+        cardType: null
+      }
+      config = {
+        navigationBarTitleText: ''
+      }
+      methods = {
+        async cancelCard() {
+          let res = await tips.confirm('解绑后将无法充值、提现及投标，您确定要解绑银行卡吗？')
+          if (res === 0) {
+            // 确定之后请求接口 这里并没有 先空着
+          } else if (res === 2) {
+            console.log('===' + 'ERR_WX_MODAL' + '===')
+          }
+        }
+      }
+      onLoad(options) {
+        this.cardType = options.cardType
+        if (options.cardType === '1') {
+          wepy.setNavigationBarTitle({title: '存管账户'})
+        } else {
+          wepy.setNavigationBarTitle({title: '银行卡'})
+        }
+        this.$apply()
+      }
+    }
+</script>

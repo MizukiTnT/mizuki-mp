@@ -1,0 +1,63 @@
+<style>
+
+</style>
+
+<template>
+  <view class='invest-page'>
+    <bid :list='bidList'></bid>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import bid from '@/components/bidList'
+export default class invest extends wepy.page {
+  config = {
+    navigationBarTitleText: '投资',
+    enablePullDownRefresh: true
+  }
+  components = {
+    bid: bid
+  }
+  data = {
+    bidList: [
+      {
+        amount: '100',
+        profit: '10.8',
+        limit: '6',
+        progress: '6.4',
+        bidId: '10055', //  标id 用于详情请求
+        title: '金猪宝Y20170203',
+        state: 0 // 是否有mark 0无 1加息 2热门
+      },
+      {
+        amount: '100',
+        profit: '10.8',
+        limit: '6',
+        progress: '6.4',
+        bidId: '10055',
+        title: '金猪宝Y20170203',
+        state: 1
+      },
+      {
+        amount: '100',
+        profit: '10.8',
+        limit: '6',
+        progress: '6.4',
+        bidId: '10055',
+        title: '金猪宝Y20170203',
+        state: 2
+      },
+      {
+        amount: '100',
+        profit: '10.8',
+        limit: '6',
+        progress: '6.4',
+        bidId: '10055',
+        title: '金猪宝Y20170203',
+        state: 0
+      }
+    ]
+  }
+}
+</script>

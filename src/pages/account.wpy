@@ -1,0 +1,256 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+/* 顶部信息框 */
+page {
+  height: 100%;
+}
+.account {
+  height: 100%;
+  background-color: #f7f7f7;
+  .user-info  {
+  padding: 20rpx 20rpx 35rpx;
+  background-color: #fd5353;
+  .top-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    .avatar{
+      display: inline-block;
+      width: 60rpx;
+      height: 60rpx;
+    }
+    .nickname {
+      color: #fff;
+      font-size: 12px;
+    }
+    .tomsg {
+      position: absolute;
+      right: 15rpx;
+      top: 15rpx;
+      >image {
+        width: 44rpx;
+        height: 44rpx;
+        }
+      >text {
+        position: absolute;
+        top: -10rpx;
+        right: -10rpx;
+        padding: 0px 3px;
+        background-color: #fff;
+        color: #fd5353;
+        border-radius: 50%;
+        font-size: 8px;
+        }
+      }
+    }
+  }
+  .others {
+    margin-top: 30rpx;
+    >view {
+      display: inline-block;
+      width: 50%;
+      text {
+        display: block;
+        text-align: center;
+        color: #fff;
+        font-size: 15px;
+        &:nth-child(2) {
+          color: rgba(255, 255, 255, .63);
+        }
+      }
+    }
+  }
+  .amount {
+    margin-top: 30rpx;
+    text-align: center;
+    color: #fff;
+    text {
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    navigator {
+      position: relative;
+      top: -20rpx;
+      font-size: 12px;
+      display: inline-block;
+      color: rgba(255, 255, 255, .63)
+    }
+  }
+
+  .nav-list {
+    background-color: #fff;
+    border-top: 1px solid #EBEEF5;
+    .nav-item {
+      display: flex;
+      position: relative;
+      padding: 30rpx 40rpx;
+      font-size: 15px;
+      border-bottom: 1px solid #EBEEF5;
+      align-items: center;
+      &:nth-child(4) {
+        border-bottom: 20rpx solid #f7f7f7;
+      }
+      .nav-icon {
+        width: 32rpx;
+        height: 32rpx;
+        margin-right: 20rpx;
+      }
+      .arrow {
+        position: absolute;
+        right: 20rpx;
+        width: 20rpx;
+        height: 20rpx;
+      }
+    }
+  }
+  .btn-wrapper {
+    padding: 0 45rpx;
+    background-color: #fff;
+    text-align: center;
+    .btn-box {
+      position: relative;
+      top: -15rpx;
+      width: 100%;
+      padding: 15rpx 0;
+      display: inline-block;
+      border-radius: 2px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,.1);
+      >view,navigator {
+        display: inline-block;
+        width: 33%;
+        font-size: 14px;
+        &:nth-child(2) {
+          color: @color-emphasis;
+          border-left: 1px solid @border-color-sub;
+          border-right: 1px solid @border-color-sub;
+        }
+      }
+    }
+  }
+}
+</style>
+
+<template>
+  <view class='account'>
+    <!-- 上方信息栏 _S -->
+    <view class='user-info'>
+      <view class='top-wrapper'>
+        <navigator open-type="navigate"
+        url="./userCenter">
+          <image class='avatar'></image>
+          <text class='nickname'>17673058233</text>
+        </navigator>
+        <navigator class="tomsg" open-type="navigate" url="./msg">
+          <image src="../assets/img/msg-ring.png"></image>
+          <text>5</text>
+        </navigator>
+      </view>
+      <view class='amount'>
+        <text>31512</text>
+        <navigator open-type='navigate' url='../assetDetail/assetDetail'>当前总资产（元）>></navigator>
+      </view>
+      <view class='others'>
+        <view>
+          <text class='profit'>12312</text>
+          <text>累计收益（元）</text>
+        </view>
+        <view>
+          <text class='balance'>100.20</text>
+          <text>可用余额（元）</text>
+        </view>
+      </view>
+    </view>
+    <!-- 上方信息栏 _E -->
+    <!-- 中间按钮 _S -->
+    <view class="btn-wrapper">
+      <view class="btn-box">
+        <navigator url="./withdraw">提现</navigator>
+        <navigator url="./charge">充值</navigator>
+        <view @tap="">同步资金</view>
+      </view>
+    </view>
+    <!-- 中间按钮 _E -->
+    <!-- 下方列表 _S -->
+    <view class='nav-list'>
+      <navigator
+      wx:for="{{navList}}"
+      wx:for-item="item"
+      wx:key="i"
+      url='{{item.url}}'
+      class='nav-item'>
+        <image class='nav-icon' src='{{item.src}}'></image>
+        <text>{{item.text}}</text>
+        <image class='arrow' src='../assets/img/arrow.png'></image>
+      </navigator>
+      <navigator class='nav-item' url='redPocket'>
+        <image class='nav-icon' src=''></image>
+        <text>红包卡券</text>
+        <image class='arrow' src='../assets/img/arrow.png'></image>
+      </navigator>
+    </view>
+    <!-- 下方列表 _E -->
+    <!-- 去登录图层 _S -->
+    <tologin hidden="{{isLogin}}"></tologin>
+    <!-- 去登录图层 _E -->
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import {LOGIN_CONDITION} from '../utils/constant'
+import tologin from '../components/toLogin'
+export default class account extends wepy.page {
+  config = {
+    navigationBarTitleText: '我的账户'
+  }
+  components = {
+    tologin
+  }
+  data = {
+    isLogin: true,
+    navList: [
+      {
+        url: 'details?type=0',
+        text: '我的投资',
+        src: '../assets/img/list_ic1.png'
+      },
+      {
+        url: 'details?type=1',
+        text: '我的回款',
+        src: '../assets/img/list_ic2.png'
+      },
+      {
+        url: 'details?type=2',
+        text: '我的借款',
+        src: '../assets/img/list_ic3.png'
+      },
+      {
+        url: 'details?type=3',
+        text: '我的债转',
+        src: '../assets/img/list_ic4.png'
+      }
+    ]
+  }
+  async onLoad() {
+    // 获取是否登录
+    let loginCondition = await wepy.getStorageSync(LOGIN_CONDITION) || false
+    // if (!loginCondition) {
+    //   this.isLogin = false
+    // } else {
+    //   this.isLogin = true
+    // }
+    this.$apply()
+  }
+  async onShow() {
+    let loginCondition = await wepy.getStorageSync(LOGIN_CONDITION) || false
+    // if (!loginCondition) {
+    //   this.isLogin = false
+    // } else {
+    //   this.isLogin = true
+    // }
+    this.$apply()
+  }
+}
+</script>

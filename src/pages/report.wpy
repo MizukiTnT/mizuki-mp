@@ -1,0 +1,261 @@
+ <style lang="less">
+@import '../assets/style/base/base.less';
+  .report {
+    .tabs {
+      height: 70rpx;
+      text-align: center;
+      >view {
+        padding: 10rpx 0;
+        display: inline-block;
+        width: 45%;
+        text-align: center;
+        border: 1px solid @color-emphasis;
+        color: @color-emphasis;
+        font-size: 13px;
+        transition: all .35s;
+        &:first-child {
+          border-radius: 4px 0 0 4px;
+        }
+        &:last-child {
+          border-radius: 0 4px 4px 0;
+        }
+        &.cur {
+          background-color: @color-emphasis;
+          color: #fff;
+        }
+      }
+    }
+    .content {
+      .loading {
+        padding: 15rpx 0;
+        font-size: 12px;
+        color:#999;
+        vertical-align: middle;
+        transition: all .25s;
+        text-align: center;
+      }
+      .item {
+        padding: 10rpx 35rpx;
+        border-bottom: 1px solid @border-color-sub;
+        &.clicked {
+          color: @color-sub;
+        }
+        .title {
+          margin-bottom: 15rpx;
+          font-size: 16px;
+          overflow: hidden;
+          white-space: normal;
+          text-overflow: ellipsis;
+        }
+        .catlog {
+          font-size: 12px;
+        }
+        .time {
+          text-align: right;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+ </style>
+
+ <template>
+  <view class="report">
+    <view class="tabs">
+      <view @tap="handleTap('0')" class="{{tab ? 'cur': ''}}">平台公告</view>
+      <view class="{{tab ? '' : 'cur'}}" @tap="handleTap('1')">还款公告</view>
+    </view> 
+    <scroll-view
+     scroll-y
+     bindscrolltoupper="refresh"
+     style="height:{{height}}px"  class="content">
+      <!-- 下拉刷新 _S -->
+      <view class="loading" wx:if="{{isLoading}}">
+        <text class="weui-loading"></text>
+        <text class="loading-text">正在加载</text>
+      </view>
+      <!-- 下拉刷新 _E -->
+      <view class="content">
+        <!-- 平台公告 _S -->
+        <view 
+        wx:if="{{tab}}"
+        wx:for="{{plateInfos}}" 
+        wx:for-item="item"
+        wx:for-index="index"
+        wx:key="i"
+        @tap="naviTo({{item.id}}, {{index}})"
+        class="item {{item.clicked ? 'clicked' : ''}}">
+          <view class="title">{{item.title}}</view>
+          <view class="catlog">
+            <view>{{item.first}}</view>
+            <view>{{item.second}}</view>
+          </view>
+          <view class="time">{{item.time}}</view>
+        </view>
+        <!-- 平台公告 _E -->
+        <!-- 还款公告 _S -->
+        <view 
+        wx:if="{{!tab}}"
+        wx:for="{{repayInfos}}" 
+        wx:for-item="item"
+        wx:for-index="index"
+        wx:key="i"
+        @tap="repayNaviTo({{item.id}}, {{index}})"
+        class="item {{item.clicked ? 'clicked' : ''}}">
+          <view class="title">{{item.title}}</view>
+          <view class="catlog">
+            <view>{{item.first}}</view>
+            <view>{{item.second}}</view>
+          </view>
+          <view class="time">{{item.time}}</view>
+        </view>        
+        <!-- 还款公告 _E -->
+      </view>
+    </scroll-view>
+  </view>
+ </template>
+ 
+ <script>
+   import wepy from 'wepy'
+   import {SYSTEM_INFO} from '../utils/constant'
+   export default class report extends wepy.page {
+     data = {
+       height: 0, // scroll-view的高度
+       isLoading: false, // 显示loading
+       tab: true, // tab切换 true为1项
+       plateInfos: [
+         {
+           title: '金猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '12332'
+         },
+         {
+           title: '金猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '3232'
+         },
+         {
+           title: '金猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '3232322'
+         },
+         {
+           title: '金猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '113232'
+         },
+         {
+           title: '金猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '32545432'
+         },
+         {
+           title: '金猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '32545432'
+         }
+       ],
+       repayInfos: [
+         {
+           title: '金猪222宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '12332'
+         },
+         {
+           title: '金23232猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '3232'
+         },
+         {
+           title: '金3434猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '3232322'
+         },
+         {
+           title: '金4545猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '113232'
+         },
+         {
+           title: '金556猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '32545432'
+         },
+         {
+           title: '金猪宝232232',
+           time: '2017-01',
+           first: '3232323232',
+           second: '23232323232',
+           clicked: false,
+           id: '32545432'
+         }
+       ]
+     }
+     methods = {
+       handleTap(index) {
+         if (index === '0') {
+           this.tab = true
+         } else if (index === '1') {
+           if (this.repayInfos === null) {
+             // 这里请求接口一次 赋值并渲染
+           }
+           this.tab = false
+         }
+         this.$apply()
+       },
+       naviTo(id, index) {
+         this.plateInfos[index].clicked = true
+       },
+       repayNaviTo(id, index) {
+         this.repayInfos[index].clicked = true
+       },
+       refresh() {
+         let that = this
+         this.isLoading = true
+         setTimeout(() => {
+           that.isLoading = false
+           that.$apply()
+         }, 1000)
+         this.$apply()
+       }
+     }
+     async onLoad() {
+       let systemInfo = await wepy.getStorageSync(SYSTEM_INFO)
+       console.log(systemInfo)
+       this.height = systemInfo.windowHeight
+     }
+   }
+ </script>

@@ -1,0 +1,233 @@
+<style lang="less">
+  .input-wrapper {
+    width: 100%;
+    display: table;
+    position: relative;
+    box-sizing: border-box;
+    padding: 25rpx 15rpx;
+    border-bottom: 1px solid #DCDFE6;
+    vertical-align: middle;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    transition: all .35s;  
+    &.underline {
+      border-color: #fd5353;
+    }
+    input {
+      display: table-cell;
+      padding-left: 15rpx;
+      font-size: 16px;
+      vertical-align: middle;
+    }
+    .msgcode {
+      display: table-cell;
+      background-color: #409eff;
+      color: #fff;
+      padding: 0;
+      width:200rpx;
+    }
+    .subtitle {
+      display: table-cell;
+      width: 160rpx;
+      line-height: 1.4rem;
+      font-size: 14px;
+    }
+    .profit {
+      position: absolute;
+      left: 190rpx;
+      font-size: 13px;
+      color: #fd5353;
+      line-height: 1.4rem;
+    }
+    .charge {
+      display: table-cell;
+      line-height: 1.4rem;
+      font-size: 13px;
+      text-align: center;
+      background-color: #fd5353;
+      color: #fff;
+      padding: 0 20rpx;
+      border-radius: 4px;
+    }
+    .bankicon {
+      display: table-cell;
+      width: 35rpx;
+      height: 35rpx;
+    }
+    .icon {
+      display: table-cell;
+      width: 45rpx;
+      text-align: center;
+      image {
+        vertical-align: top;
+        width: 45rpx;
+        height: 45rpx;
+        transition: all .75s;
+      }
+    }    
+  }
+</style>
+
+<template>
+    <view style="margin-bottom:{{marb ? marb : '50'}}rpx" class="input-wrapper {{underline ? 'underline' : ''}}">
+        <view wx:if="{{icon}}" class="icon">
+          <image src="{{src}}"></image>
+        </view>
+        <slot name="subtitle"></slot>
+        <input
+        value="{{inputValue}}"
+        style="{{style}}"
+        placeholder-class="placehoder"
+        class="input"
+        type="{{type}}"
+        placeholder="{{placeholder}}"
+        disabled="{{disabled}}"
+        password="{{password}}"
+        @blur="getValue"
+        @input="regTest"
+        @focus="changeColor"
+        placeholder-style="{{placeholderStyle}}"
+        id="{{identity}}"></input>
+        <slot name="button"></slot>
+        <button size="mini" wx:if="{{openMsg}}" disabled="{{isSending}}" @tap="sendMsg" class="msgcode">{{msgText}}</button>
+        <slot name="money"></slot>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import {sTrim} from '../utils/utils'
+    import tips from '../utils/tips'
+    export default class inputer extends wepy.component {
+      data = {
+        disabled: false,
+        msgText: '获取验证码', // 验证码文本
+        pass_time: 60, // 验证码间隔时间
+        isSending: false, // 判读是否发送消息
+        underline: false, // 下方聚焦
+        src: null, // icon会变动 所以用本地变量来装
+        srvCode: null,
+        interval: null
+      }
+      props = {
+        bidInfo: {
+          type: Object
+        },
+        inputValue: {
+          default: null,
+          twoWay: true
+        },
+        marb: {
+          type: String
+        },
+        placeholder: {
+          type: String
+        },
+        disabled: {
+          type: String
+        },
+        identity: {
+          type: String
+        },
+        type: {
+          type: String,
+          default: 'text'
+        },
+        password: {
+          type: String
+        },
+        placeholderStyle: {
+          type: String,
+          default: ''
+        },
+        openMsg: {
+
+          default: false
+        },
+        requestMethods: {
+          type: String
+        },
+        style: {
+          type: String
+        },
+        icon: { // icon为图标的名称 目前只有5个
+          type: String,
+          default: null
+        },
+        interval: {
+          twoWay: true
+        }
+      }
+      methods = {
+        // 获取值并传出去
+        getValue(e) {
+          if (this.bidInfo) {
+            if (e.detail.value < this.bidInfo.minInvest) {
+              tips.alert('小于最小可投')
+              this.inputValue = this.bidInfo.minInvest // inputValue作为最终的值传出去
+              this.$apply()
+              this.$emit('getValue', '', this.identity, this.inputValue)
+              return
+            }
+          }
+          this.inputValue = sTrim(e.detail.value)
+          this.src = '../assets/img/input-' + this.icon + '1.png'
+          this.underline = false
+          this.$apply()
+          setTimeout(() => {
+            this.$emit('getValue', '', this.identity, this.inputValue)
+          }, 50)
+        },
+        changeColor() {
+          this.src = '../assets/img/input-' + this.icon + '2.png'
+          this.underline = true
+          this.$apply()
+        },
+        // 对金额的判断 根据传入的prop来定
+        regTest(v) {
+          this.inputValue = v.detail.value
+          if (this.bidInfo) {
+            if (v.detail.value > this.bidInfo.maxInvest) {
+              tips.alert('超出最大可投')
+              this.inputValue = this.bidInfo.maxInvest // 如果超出最大可投 则再把inputValue传出去
+              this.$emit('getValue', '', this.identity, this.inputValue)
+              return this.bidInfo.maxInvest
+            }
+          }
+        },
+        // 处理定时操作
+        sendMsg() {
+          let that = this
+          let time = that.pass_time
+          this.isSending = true
+          this.$apply()
+          this.interval = setInterval(() => {
+            if (time <= 1) {
+              that.msgText = '发送验证码'
+              that.isSending = false
+              clearInterval(that.interval)
+              that.$apply()
+              return
+            }
+            time--
+            that.msgText = time + '秒后重新发送'
+            that.$apply()
+          }, 1000)
+
+          // 这里处理请求之后的数据
+          this.srvCode = '12323'
+          this.$emit('getSrvCode', this.srvCode, this.interval)
+          this.$apply()
+        }
+      }
+      onLoad() {
+        // 这里要注释一下 上面的password和disabled能行 因为空也是false 所以能选到默认值 之所以选String 因为现在空==false 我怕将来标准变了 空的值不等于false了
+        this.disabled = !!this.disabled
+        this.password = !!this.password
+        if (this.icon) {
+          this.src = '../assets/img/input-' + this.icon + '1.png'
+        }
+        this.$apply()
+      }
+    }
+</script>

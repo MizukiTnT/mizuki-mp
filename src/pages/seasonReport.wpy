@@ -1,0 +1,43 @@
+<style lang="less">
+  page {
+    background-color: #eeeff3;
+    .season-wrapper {
+      padding: 25rpx 25rpx 50rpx;
+      .card {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0,0,0,.2);
+        >image {
+          width: 100%;
+          height: 250rpx;
+          border-radius: 5px 5px 0 0;
+        }
+        .text {
+          text-align: center;
+          font-size: 14px;
+          padding: 10rpx 0;
+          border-radius: 0 0 5px 5px;
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="season-wrapper">
+    <navigator url="" class="card">
+      <image src=""></image>
+      <view class="text">2017年度运营报告</view>
+    </navigator>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class seasonReport extends wepy.page {
+    config = {
+      navigationBarTitleText: '运营报告',
+      enablePullDownRefresh: true
+    }
+  }
+</script>

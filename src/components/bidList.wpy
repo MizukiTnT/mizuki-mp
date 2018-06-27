@@ -1,0 +1,109 @@
+<style lang="less">
+    .bid-list {
+        .lai-tit {
+            padding: 10rpx 10rpx 0;
+        }
+        .bid-item {
+            padding: 10rpx;
+            border-bottom: 1px solid #EBEEF5;
+            &:last-child {
+                border-bottom: 5px solid #EBEEF5;
+            }
+            .title {
+                font-size: 14px;
+                margin-bottom: 15rpx;
+                .mark {
+                    margin-left: 5rpx;
+                    padding: 0 2px;
+                    border-radius: 3px;
+                    font-size: 12px;
+                    color: #fff;
+                    display: inline-block;
+                    &.green {
+                        background-color: #67C23A;
+                    }
+                    &.hot {
+                        background-color: #fd5353;
+                    }
+                    &.recommend {
+                        background-color: #409EFF;
+                    }
+                }
+            }
+            .detail {
+                text-align: center;
+                >text {
+                    display: inline-block;
+                    width: 33.33%;
+                    color: #fd5353;
+                }
+            }
+            .subscript {
+                text-align: center;
+                >text {
+                    font-size: 12px;
+                    display: inline-block;
+                    width: 33.33%;
+                }
+            }
+            .pro {
+                margin: 10rpx 35rpx 0;
+            }
+        }
+
+    }
+</style>
+
+<template>
+    <!-- 标的列表 _S -->
+    <view class='bid-list'>
+        <slot name='title'></slot>
+        <navigator 
+        class='bid-item'
+        wx:for="{{list}}" 
+        wx:for-item="item"
+        wx:key="i"
+        open-type='navigate' 
+        url='./bidDetail?bidId={{item.bidId}}'>
+            <view class='title'>
+                <text>{{item.title}}</text>
+                <text class="mark {{item.state === 0 ? 'none': item.state=== 1? 'hot':'green'}}">{{item.state === 0 ? '' : item.state === 1? '息':'包'}}</text>
+            </view>
+            <view class='detail'>
+                <text>{{item.profit}}</text>
+                <text>{{item.amount}}</text>
+                <text>{{item.limit}}</text>
+            </view>
+            <view class='subscript'>
+                <text class='color-gray'>预期年化</text>
+                <text class='color-gray'>剩余可投</text>
+                <text class='color-gray'>投资期限</text>
+            </view>
+            <progress
+            style='color:#999'
+            class='pro' 
+            percent="{{item.progress}}" 
+            show-info 
+            stroke-width='2' 
+            color="#fd5353" />
+        </navigator>
+    </view>
+    <!-- 标的列表 _E -->
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class bid extends wepy.component {
+  props = {
+    list: {
+      type: Array,
+      default: []
+    }
+  }
+  data = {}
+
+  onLoad() {
+    console.log()
+  }
+}
+</script>

@@ -1,0 +1,239 @@
+<style lang="less" >
+@import '../assets/style/base/base.less';
+page {
+  background-color: #eeeff3;
+  position: relative;
+  .pocket-wrapper {
+    padding: 15rpx 35rpx;
+    .loading {
+      padding: 15rpx 0;
+      font-size: 12px;
+      color:#999;
+      vertical-align: middle;
+      transition: all .25s;
+      text-align: center;
+    }
+    .controll {
+      width: 80rpx;
+      height: 80rpx;
+      line-height: 80rpx;
+      text-align: center;
+      border-radius: 50%;
+      font-size: 10px;
+      background-color: #fff;
+      position: fixed;
+      z-index: 6;
+      top: 15rpx;
+      right: 10rpx;
+    }
+    .pocket {
+      position: relative;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,.2);
+      .content {
+        padding: 15rpx;
+        background-color: #cacaca;
+        position: relative;
+        border-radius: 5px 5px 0 0;
+        >view {
+          display: inline-block;
+        }
+        .money {
+          position: relative;
+          top: -25rpx;
+          width: 40%;
+          color: #fff;
+          text-align: center;
+          .number {
+            font-size: 45px;
+            font-weight: 500;
+          }
+          .percent {
+            font-size: 30px;
+          }
+        }
+        .range {
+          width: 40%;
+          color: #fff;
+          font-size: 13px;
+          .name {
+            margin-bottom: 15rpx;
+            font-size: 18px;          
+          }
+        }
+        .condition {
+          width: 20%;
+          text-align: center;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%) rotate(25deg);
+          .badge {
+            display: inline-block;
+            font-size: 12px;
+            width: 90rpx;
+            height: 90rpx;
+            line-height: 90rpx;
+            border: 1px solid #000;
+            border-radius: 50%;
+          }
+        }
+      }
+      .decoration {
+        position: relative;
+        background-color: #fff;
+        .dot {
+          width: 100%;
+          height: 1px;
+          border-bottom: 6px dotted #cacaca;
+          position: relative;
+          top: -4px;
+        }        
+      }
+      &.cur {
+        .content {
+          background-color: @color-emphasis;
+        }
+        .decoration {
+          .dot {
+            border-bottom: 6px dotted @color-emphasis;
+          }
+        }
+      }      
+      .sub-title {
+        position: relative;
+        color: #cacaca;
+        font-size: 12px;
+        padding: 5rpx 15rpx 10rpx;
+        background-color: #fff;
+        border-radius: 0 0 5px 5px;
+        .limit {
+          position: absolute;
+          right: 15rpx;
+          top: 5rpx;
+        }
+      }
+    }
+    .rules {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      background-color: rgba(0,0,0,.2);
+      .text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 60%;
+        color: @color-normal;
+        font-size: 12px;
+        background-color: #fff;
+        padding: 25rpx 60rpx 35rpx;
+        .title {
+          color: #000;
+          font-size: 15px;
+          text-align: center;
+          margin-bottom: 35rpx;
+        }
+        .p {
+          text-indent: 1em;
+          margin-bottom: 15rpx;
+        }
+      }
+    }    
+  }
+}
+</style>
+
+<template>
+
+  <view class="pocket-wrapper">
+    <!-- 下拉刷新 _S -->
+    <view class="loading" wx:if="{{isLoading}}">
+      <text class="weui-loading"></text>
+      <text class="loading-text">正在加载</text>
+    </view>
+    <!-- 下拉刷新 _E -->    
+    <!-- 控制栏 _S -->
+    <view @tap="change" class="controll">使用规则</view>
+    <!-- 控制栏 _S -->
+    <!-- 红包卡片 _S -->
+    <view class="pocket {{used ? '' : 'cur'}}">
+      <!-- 内容 _S -->
+      <view class="content">
+        <!-- 金额 _S -->
+        <view class="money">
+          <text class="number">2</text>
+          <text class="percent">%</text>
+        </view>
+        <!-- 金额 _E -->
+        <!-- 限制 _S -->
+        <view class="range">
+          <view class="name">加息券</view>
+          <view>单笔投资金额不限</view>
+          <view>项目期限不限</view>
+        </view>
+        <!-- 限制 _E -->
+        <!-- 状态 _S -->
+        <view class="condition">
+          <view class="badge">{{used ? '已使用' : '未使用'}}</view>
+
+        </view>
+        <!-- 状态 _E -->
+      </view>
+      <!-- 内容 _E -->
+      <!-- 装饰点 _S -->      
+      <view class="decoration">
+        <view class="dot"></view>
+      </view>
+      <!-- 装饰点 _E -->
+      <!-- 下方信息 _S -->
+      <view class="sub-title">
+        <view class="from">来源：</view>
+        <view class="limit">有效期至：</view>
+      </view>
+      <!-- 下方信息 _E -->
+    </view>
+    <!-- 红包卡片 _E -->    
+    <!-- 投资规则 _S -->
+
+    <view hidden="{{openTip}}"  @tap="close" class="rules">
+      <view class="text">
+        <view class="title">使用规则</view>
+        <view class="p">1.现金红包与加息券需要您在投标界面手动选择。</view>
+        <view class="p">2.单次仅可激活一个现金红包或使用一张加息券。</view>
+        <view class="p">3.激活后的红包在您的账户可用余额内，可提现也可继续投标使用。</view>
+        <view class="p">4.加息券适用于平台理财项目，不包含债权转让；若使用了加息券的项目发生债权转让则加息券失效且作废，失去享受的额外收益奖励。</view>
+        <view class="p">5.使用加息券成功后，在项目到期还款时，同步回款至用户账户。加息产生的额外收益按平台正常收费标准收取投资管理费。</view>
+        <view class="p">6.若使用加息券所产生的额外收益不到1分钱，系统则不会分配收益。</view>
+      </view>
+    </view>
+    <!-- 投资规则 _E -->    
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class pocket extends wepy.page {
+  config = {
+    navigationBarTitleText: '红包卡券',
+    enablePullDownRefresh: true
+  }
+  data = {
+    openTip: true // 判断提示框是否弹出
+  }
+  methods = {
+    change() {
+      this.openTip = false
+    },
+    close() {
+      this.openTip = true
+    }
+  }
+  onLoad() {
+
+  }
+}
+</script>

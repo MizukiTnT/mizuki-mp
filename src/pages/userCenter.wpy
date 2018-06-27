@@ -1,0 +1,196 @@
+<style lang="less">
+page {
+    height: 100%;
+    .userCenter {
+        height: 100%;
+        background-color: #f7f7f7;
+        .list-wrapper {
+            padding-top: 15rpx;
+            background-color: #f7f7f7;
+            .list {
+                margin-bottom: 15rpx;
+                background-color: #fff;
+                .list-item {
+                    padding: 25rpx;
+                    position: relative;
+                    border-bottom: 1px solid #E4E7ED;
+                    &:last-child {
+                        border-bottom: none;
+                    }
+                    .left-side {
+                        display: flex;
+                        align-items: center;
+                        image {
+                            width: 50rpx;
+                            height: 50rpx;
+                            margin-right: 30rpx;
+                        }
+                        .text {
+                            font-size: 14px;
+                        }
+                    }
+                    .right-side {
+                        position: absolute;
+                        right: 25rpx;
+                        top: 20rpx;
+                        .avatar {
+                            width: 50rpx;
+                            height: 50rpx;
+                            border-radius: 50%;
+                            overflow: hidden;
+                            image {
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+                        .text {
+                            margin-right: 10rpx;
+                            font-size: 13px;
+                            color: #909399;
+                        }
+                        >image {
+                            position: relative;
+                            top: 2rpx;
+                            width: 14rpx;
+                            height: 20rpx;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+</style>
+<template>
+  <view class="userCenter">
+    <view class="list-wrapper">
+        <view class="list">
+            <view @tap="takePhotos" class="list-item">
+                <view class="left-side">
+                    <image src="../assets/img/avatar@2x.png" class="icon"></image>
+                    <text class="text">头像设置</text>
+                </view>
+                <view class="right-side">
+                    <view class="avatar">
+                        <image src=""></image>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="list">
+            <view @tap="navigate('1')" class="list-item">
+                <view class="left-side">
+                    <image src="../assets/img/save@2x.png" class="icon"></image>
+                    <text class="text">存管账户</text>
+                </view>
+                <view class="right-side">
+                    <text class="text">{{userInfo.jiangxi ? '查看' : '去申请'}}</text>
+                    <image src="../assets/img/arrow.png"></image>
+                </view>
+            </view>
+            <view @tap="navigate('2')" class="list-item">
+                <view class="left-side">
+                    <image src="../assets/img/card@2x.png" class="icon"></image>
+                    <text class="text">银行卡</text>
+                </view>
+                <view class="right-side">
+                    <text class="text">{{userInfo.card ? '已绑定' : '去绑定'}}</text>
+                    <image src="../assets/img/arrow.png"></image>
+                </view>
+            </view>
+            <view @tap="navigate('3')" class="list-item">
+                <view class="left-side">
+                    <image src="../assets/img/electron.png" class="icon"></image>
+                    <text class="text">电子签章</text>
+                </view>
+                <view class="right-side">
+                    <text class="text">{{userInfo.electron? '已申请' : '申请'}}</text>
+                    <image src="../assets/img/arrow.png"></image>
+                </view>
+            </view>
+        </view>
+        <view class="list">
+            <navigator url="./vertification?type=1" open-type="navigate" class="list-item">
+                <view class="left-side">
+                    <image src="../assets/img/phone@2x.png" class="icon"></image>
+                    <text class="text">绑定手机</text>
+                </view>
+                <view class="right-side">
+                    <text class="text">{{userInfo.phoneNumber}}</text>
+                    <image src="../assets/img/arrow.png"></image>
+                </view>
+            </navigator>
+            <navigator url="" class="list-item">
+                <view class="left-side">
+                    <image src="../assets/img/trade@2x.png" class="icon"></image>
+                    <text class="text">交易密码</text>
+                </view>
+                <view class="right-side">
+                    <text class="text">修改</text>
+                    <image src="../assets/img/arrow.png"></image>
+                </view>
+            </navigator>
+            <navigator url="./vertification?type=2" class="list-item">
+                <view class="left-side">
+                    <image src="../assets/img/clock@2x.png" class="icon"></image>
+                    <text class="text">登录密码</text>
+                </view>
+                <view class="right-side">
+                    <text class="text">修改</text>
+                    <image src="../assets/img/arrow.png"></image>
+                </view>
+            </navigator>
+        </view>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy'
+// import tips from '../utils/tips'
+export default class userCenter extends wepy.page {
+  data = {
+    userInfo: {
+      jiangxi: true,
+      card: true,
+      electron: true,
+      phoneNumber: 1331313133
+    }
+  }
+
+  config = {
+    navigationBarTitleText: '账户信息'
+  }
+  onLoad() {
+
+  }
+  methods = {
+    takePhotos() {
+      wepy.chooseImage({
+        count: 1, // 最大接受相片数
+        sizeType: ['compressed'], // 选择压缩照片
+        sourceType: ['album', 'camera'], // 选择拍照或从相册内选
+        success: function(res) {
+          console.log(res)
+        },
+        fail: function(res) {
+          console.log(res)
+        }
+      })
+    },
+    navigate(type) {
+      if (type === '1' && this.userInfo.jiangxi) {
+        wepy.navigateTo({
+          url: './cards?cardType=1'
+        })
+      } else if (type === '2' && this.userInfo.card) {
+        wepy.navigateTo({
+          url: './cards?cardType=2'
+        })
+      } else if (type === '3') {
+        
+      }
+    }
+  }
+}
+</script>

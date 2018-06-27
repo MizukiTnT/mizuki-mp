@@ -1,0 +1,59 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+  .msg-detail {
+    .text {
+      padding: 0 35rpx;
+      .head {
+        position: relative;
+        padding: 15rpx 25rpx;
+        border-bottom: 1px solid @border-color-sub;
+        .title {
+          font-size: 14px;
+        }
+        .time { 
+          position: absolute;
+          top: 15rpx;
+          right: 25rpx;
+          color: @color-sub;
+          font-size: 12px;
+        }
+      }
+      .content {
+        margin-top: 15rpx;
+        text-indent: 2em;
+        font-size: 12px;
+        color: @color-sub;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="msg-detail">
+    <view class="text">
+      <view class="head">
+        <view class="title">【 {{title}} 】</view>
+        <view class="time">{{time}}</view>
+      </view>
+      <view class="content">{{content}}</view>
+    </view>
+    <view></view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class msgDetail extends wepy.page {
+    data = {
+      time: null,
+      content: null,
+      title: null
+    }
+    onLoad(options) {
+      this.time = options.time
+      this.content = options.content
+      this.title = options.title
+    }
+  }
+
+</script>

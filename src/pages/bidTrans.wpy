@@ -1,0 +1,74 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+  .bidtrans {
+    .item {
+      position: relative;
+      padding: 20rpx 35rpx;
+      border-bottom: 10rpx solid @border-color-sub;
+      .left {
+        display: inline-block;
+        width: 75%;
+        color: @color-sub;
+        >view {
+          display: inline-block;
+          width: 50%;
+          font-size: 11px;
+          .em {
+            font-size: 14px;
+            color: @color-emphasis;
+          }
+          .text {
+            color: @color-main;
+            font-size: 14px;
+          }
+          .time {
+            color: @color-normal;
+            font-size: 10px;
+          }
+        }
+      }
+      .right {
+        display: inline-block;
+        width: 25%;
+        .button {
+          position: absolute;
+          top: 50%;
+          right: 40rpx;
+          transform: translateY(-50%);
+          padding: 3rpx 15rpx;
+          color: #fff;
+          font-size: 13px;
+          border-radius: 3px;
+          background-color: @color-emphasis;
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="bidtrans">
+    <navigator url="" class="item">
+      <view class="left">
+        <view>让利：<text class="em">9132</text>元</view>
+        <view>转让价格：<text class="em">350001323</text>元</view>
+        <view>期限: <text class="text">70</text>天</view>
+        <view>剩余时间：<text class="time">6天18小时3分</text></view>
+      </view>
+      <view class="right">
+        <view class="button">购买</view>
+      </view>
+    </navigator>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class bidTrans extends wepy.page {
+    config = {
+      enablePullDownRefresh: true,
+      navigationBarTitleText: '债权转让',
+      onReachBottom: true
+    }
+  }
+</script>

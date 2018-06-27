@@ -1,0 +1,615 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+  page {
+    position: relative;  
+    height: 100%;
+    background-color: @border-color-sub;
+    .bid-detail {
+        height: 100%;
+        >swiper {
+            height: 100%;
+            .page1 {
+                .banner {
+                    position: relative;
+                    .bg {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                    }
+                    .per-wrapper {
+                        position: relative;
+                        padding-top: 15rpx;
+                        z-index: 1;
+                        color: @color-emphasis;
+                        text-align: center;
+                        .number {
+                            font-size: 36px;
+                            margin-right: 7rpx;
+                        }
+                        .percent {
+                            font-size: 25px
+                        }
+                        .sub-tilte {
+                            margin: 10rpx;
+                            font-size: 11px;
+                            color: @color-normal;
+                        }
+                    }
+                    .details {
+                        position: relative;
+                        z-index: 1;
+                        text-align: center;
+                        color: @color-normal;
+                        >view {
+                            display: inline-block;
+                            font-size: 12px;
+                            >text {
+                                color: @color-emphasis;
+                                font-size: 16px;
+                            }
+                            &:first-child {
+                                margin-right: 100rpx;
+                            }
+                        }
+                    }
+                    .pro {
+                        position: relative;
+                        z-index: 1;
+                        padding: 0 100rpx;
+                    }
+                }
+                .inputers {
+                    padding: 0 25rpx;
+                    background-color: #fff;
+                }
+                .contract {
+                    text-align: center;
+                    .icon {
+                        width: 30rpx;
+                        height: 30rpx;
+                        margin-right: 15rpx;
+                        vertical-align: middle;
+                    }
+                    .inline {
+                        display: inline-block;
+                        font-size: 11px;
+                        color: @color-sub;
+                        letter-spacing: .5px;
+                        >navigate {
+                            color: @color-emphasis;
+                            font-size: 14px;
+                        }
+                    }
+                    .notice {
+                        font-size: 11px;
+                        color: @color-sub;      
+                        letter-spacing: .5px;                         
+                    }
+                }
+                .hint {
+                    position: absolute;
+                    bottom: 120rpx;
+                    left: 0;
+                    width: 100%;
+                    text-align: center;
+                    font-size: 11px;
+                    color: @color-sub;
+                }
+            }
+            .page2 {
+                position: relative;
+                .switch-tab {
+                    position: relative;
+                    .tab-item {
+                        height: 43px;
+                        margin-bottom: 5px;
+                        display: flex;
+                        justify-content: center;
+                        flex-wrap: nowrap;
+                        line-height: 43px;
+                        background-color: #fff;
+                        font-size: 15px;
+                        .tab {
+                            flex: 1 0 33.33%;
+                            text-align: center;
+                            &.cur {
+                                color: @color-emphasis;
+                            }
+                        }
+                    }
+                    .decoration {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 1px;
+                        .underline {
+                            height: 2px;
+                            background-color: @color-emphasis;
+                            position: relative;
+                            transition: left .5s;
+                        }
+                    }                
+                }
+                .horizon-swiper {
+                    position: absolute;
+                    top: 49px;
+                    left: 0;
+                    width: 100%;
+                    background-color: #fff;
+                    .project {
+                        height: 100%;
+                        background-color: @border-color-sub;
+                        >view {
+                            margin-top: 10rpx;
+                            background-color: #fff;
+                            &:first-child {
+                                margin-top: 0;
+                            }
+                            .subtitle {
+                                padding: 20rpx 45rpx;
+                                border-bottom: 1px solid @border-color-sub;
+                                font-size: 12px;
+                                .icon {
+                                    margin-right: 15rpx;
+                                    vertical-align: top;
+                                }
+                            }
+                            .flex {
+                                display: flex;
+                                flex-wrap: wrap;
+                                padding: 15rpx 50rpx;
+                                >view {
+                                    flex: 1 0 50%; 
+                                    padding: 10rpx 0;
+                                    text-indent: 60rpx;
+                                    font-size: 11px;
+                                    color: @color-normal;
+                                    >text {
+                                        color: @color-main;
+                                    }
+                                }
+                            }
+                        }
+                        .info {
+                            .subtitle {
+                                .icon {
+                                    width: 49rpx;
+                                    height: 33rpx;
+                                }
+                            }
+                        }
+                        .history {
+                            .subtitle {
+                                .icon {
+                                    width: 46rpx;
+                                    height: 41rpx;
+                                }
+                            }                            
+                        }
+                        .illustrate {
+                            .subtitle {
+                                .icon {
+                                    width: 36rpx;
+                                    height: 43rpx;
+                                }
+                            }
+                            .content {
+                                padding: 15rpx 40rpx;
+                                color: @color-main;
+                                font-size: 11px;
+                            }   
+                        }
+                    }
+                    .riskmanage {
+                        background-color: @border-color-sub;
+                        .flow {
+                            padding: 50rpx 50rpx 20rpx; 
+                            background-color: #fff;
+                            display: flex;
+                            flex-wrap: wrap;
+                            .tw {
+                                margin-bottom: 30rpx;
+                                flex: 1 0 25%;
+                                text-align: center;
+                                .pic {
+                                    width: 70rpx;
+                                    height: 70rpx;
+                                }
+                                .text {
+                                    font-size: 8px;
+                                    color: @color-sub;
+                                }
+                            }
+                        }
+                        .subtitle {
+                            padding: 15rpx 55rpx;
+                            margin-top: 10rpx;
+                            font-size: 12px;
+                            border-bottom: 1px solid @border-color-sub;
+                            background-color: #fff;
+                            .icon {
+                                width: 23rpx;
+                                height: 23rpx;
+                            }
+                        }
+                        .evaluate {
+                            padding: 15rpx 45rpx;
+                            color: @color-sub;
+                            background-color: #fff; 
+                            font-size: 11px;
+                        }
+                    }
+                    .list {
+                      background-color: #fff;
+                        .tit {
+                            position: relative;
+                            padding: 10rpx 65rpx;
+                            font-size: 16px;
+                            border-bottom: 1px solid @border-color-sub;
+                            >view {
+                                &:last-child {
+                                    position: absolute;
+                                    right: 65rpx;
+                                    top: 10rpx;
+                                }
+                            }
+                        }
+                        .item {
+                            padding: 5rpx 45rpx;
+                            border-bottom: 1px solid @border-color-sub;
+                            .number {
+                                padding: 0 20rpx;                                    
+                                position: relative;
+                                .phone {
+                                    font-size: 12px;
+                                }
+                                .amount {
+                                    position: absolute;
+                                    right: 20rpx;
+                                    top: 5rpx;
+                                    font-size: 12px;
+                                    color: @color-emphasis;
+                                }
+                            }
+                            .time {
+                                font-size: 11px;
+                                color: @color-sub;
+                                padding-left: 20rpx;
+                            }
+                        }  
+                    }
+                }
+            }
+        }
+        .calculate {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 100rpx;
+            width: 100%;
+            padding: 0 45rpx 0 110rpx;
+            box-sizing: border-box;
+            background-color: #fff;
+            border-top: 1px solid @border-color-main;
+            .cal {
+                width: 50rpx;
+                height: 50rpx;
+                position: absolute;
+                top: 25rpx;
+                left: 45rpx;
+            }
+            .button-wrapper {
+                position: relative;
+                top: 20rpx;
+                width: 100%;
+                display: inline-block;
+                .invest {
+                    font-size: 14px;
+                    height: 60rpx;
+                    line-height: 60rpx;
+                    background-color: #fd5353;
+                }
+            }
+        }        
+    }
+  }
+</style>
+
+<template>
+    <view class="bid-detail">
+        <swiper vertical="true">
+            <swiper-item class="page1">
+                <view class="banner">
+                    <view class="per-wrapper">
+                        <view>
+                            <text class="number">7.8</text>
+                            <text class="percent">%</text>
+                        </view>
+                        <view class="sub-tilte">预期年化</view>
+                    </view>
+                    <view class="details">
+                        <view>项目期限<text> 7</text>个月</view>
+                        <view>项目规模<text> 0.99 </text>万</view>
+                    </view>
+                    <view class="pro">
+                        <progress percent="40" stroke-width="4" show-info 
+                        style="color:#999;font-size:12px"
+                        color="#fd5353" />
+                    </view>
+                    <view class="bottom">
+                        <view>剩余可投<text>0</text>元</view>
+                        <view>
+                            剩余时间:
+                            <text>11</text>天
+                            <text>24</text>时
+                            <text>11</text>分
+                            <text>12</text>秒
+                        </view>
+                    </view>
+                    <image class="bg" src="../assets/img/bid-bg.png"></image>
+                </view>
+                <view class="inputers">
+                    <inputera marb="0" 
+                    disabled
+                    :placeholder="amount"
+                    placeholderStyle="color:#fd5353" 
+                    style="font-size:14px;color:#fd5353">
+                        <view class="subtitle" slot="subtitle">可用余额</view>
+                        <view class="charge" @tap="chargePage" slot="button">充值</view>
+                    </inputera>
+                    <inputerb
+                    identity="invest" 
+                    marb="0" 
+                    :placeholder="placeholder"
+                    type="number"
+                    :bidInfo="bidInfo"
+                    style="font-size:14px;color:#fd5353"
+                    placeholderStyle="color:#fd5353">
+                        <view class="subtitle" slot="subtitle">投标金额</view>
+                    </inputerb>
+                    <inputerc 
+                    marb="0" 
+                    disabled>
+                        <view class="subtitle" slot="subtitle">预期收益</view>
+                        <view class="profit" slot="money">{{profit}}</view>
+                    </inputerc>                        
+                </view>
+                <view class="contract">
+                    <view> 
+                        <image src="../assets/img/bid-yes.png" class="icon"></image>
+                        <view class="inline">同意成功后自动生成《<navigate url="">理财合同</navigate>》</view>
+                    </view>
+                    <view class="notice">来融金服提醒您：投资有风险，理财需谨慎</view>
+                </view>
+                <view class="hint">向上滑动 查看更多</view>
+            </swiper-item>
+            <swiper-item class="page2">
+                <view class="switch-tab">
+                    <view class="tab-item">
+                        <view @tap="changeItem(0)" class="tab {{cur === 0 ? 'cur' : ''}}">项目信息</view>
+                        <view @tap="changeItem(1)" class="tab {{cur === 1 ? 'cur' : ''}}">风控审核</view>
+                        <view @tap="changeItem(2)" class="tab {{cur === 2 ? 'cur' : ''}}">投标记录</view>
+                    </view>
+                    <view class="decoration">
+                        <view style="width:{{lineLength}}px;left:{{left}}px" class="underline"></view>
+                    </view>
+                </view>
+                <swiper 
+                style="height:{{height}}px" class="horizon-swiper" 
+                current="{{cur}}"
+                bindchange="changeCur">
+                    <swiper-item class="project">
+                        <view class="info">
+                            <view class="subtitle">
+                                <image class="icon" src="../assets/img/bid-icon1.png"></image>
+                                <text>农户信息</text>
+                            </view>
+                            <view class="content flex">
+                                <view>农户姓名：<text class="nomarl"></text></view>
+                                <view>经营范围：<text class="nomarl"></text></view>
+                                <view>农户年龄：<text class="nomarl"></text></view>
+                                <view>所在区域：<text class="nomarl"></text></view>
+                                <view>借款用途：<text class="nomarl"></text></view>
+                                <view>还款来源：<text class="nomarl"></text></view>                                
+                            </view>
+                        </view>
+                        <view class="history">
+                            <view class="subtitle">
+                                <image class="icon" src="../assets/img/bid-icon2.png"></image>
+                                <text>历史借贷</text>
+                            </view>
+                            <view class="content flex">
+                                <view>成功借款：1 次</view>
+                                <view>正常还贷：2 次</view>
+                                <view>逾期未还：0 元</view>
+                                <view>预期还款：0 次</view>
+                                <view>累积借款：0 元</view>
+                                <view>待还金额：0 元</view>
+                            </view>
+                        </view>
+                        <view class="illustrate">
+                            <view class="subtitle">
+                                <image class="icon" src="../assets/img/bid-icon3.png"></image>
+                                <text>项目说明</text>
+                            </view>
+                            <view class="content">我叫安禄山反倒是开飞机啊是看风景封建士大夫精神的咖啡就是大；来访接待室里就发卡机首府拉萨就发了；空间克隆；大家发生纠纷</view>
+                        </view>
+                    </swiper-item>
+                    <swiper-item class="riskmanage">
+                        <view class="flow">
+                            <view class="tw">
+                                <image class="pic" src="../assets/img/risk-1.png"></image>
+                                <view class="text">1.项目初审</view>
+                            </view>
+                            <view class="tw">
+                                <image class="pic" src="../assets/img/risk-1.png"></image>
+                                <view class="text">2.项目尽调（风控评级）</view>
+                            </view>
+                            <view class="tw">
+                                <image class="pic" src="../assets/img/risk-1.png"></image>
+                                <view class="text">3.项目授信</view>
+                            </view>
+                            <view class="tw">
+                                <image class="pic" src="../assets/img/risk-1.png"></image>
+                                <view class="text">4.平台放款</view>
+                            </view>
+                               <view class="tw">
+                                <image class="pic" src="../assets/img/risk-1.png"></image>
+                                <view class="text">5.要件收档</view>
+                            </view>
+                            <view class="tw">
+                                <image class="pic" src="../assets/img/risk-1.png"></image>
+                                <view class="text">6.贷后管理</view>
+                            </view>
+                            <view class="tw">
+                                <image class="pic" src="../assets/img/risk-1.png"></image>
+                                <view class="text">7.客户维护和结案</view>
+                            </view>
+                        </view>
+                        <view class="subtitle">
+                            <image class="icon" src="../assets/img/risk-8.png"></image>
+                            <text>CBO风控体系</text>
+                        </view>
+                        <view class="evaluate">
+                            进过风控团队副驾驶的肌肤；是两地分居；使得肌肤水分减少的风景啊送到了附近撒地方就撒到了房间看房间打扫房间打扫房间可
+                        </view>
+                    </swiper-item>
+                    <swiper-item class="list">
+                        <view class="tit">
+                            <view>投标人</view>
+                            <view>投标金额</view>
+                        </view>
+                        <view class="item">
+                            <view class="number">
+                                <view class="phone">15513131</view>
+                                <view class="amount">900000</view>
+                            </view>
+                            <view class="time">2018 212133</view>
+                        </view>
+                    </swiper-item>
+                </swiper>
+            </swiper-item>
+        </swiper>     
+        <view class="calculate">
+            <image @tap="openCal" class="cal" src="../assets/img/bid-cal.png"></image>    
+            <view class="button-wrapper">
+                <button class="invest" type="warn">投标</button>
+            </view>
+        </view>
+        <cal :isHidden.sync="isHidden" :profit="calProfit" :time="time" :timeType="timeType"></cal>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import inputer from '../components/input'
+    import cal from '../components/calculate'
+    import {SYSTEM_INFO} from '../utils/constant'
+    export default class bidDetail extends wepy.page {
+      data = {
+        cur: 0, // 第二页判断当前页面索引
+        height: 0,
+        lineLength: 78, // 下划线宽度
+        lineOffset: 0, // 下滑线初始偏移
+        windowWidth: 0, // 获取的屏幕宽度
+        left: 0, // 下划线动态偏移
+        value: 0, // 投资金额
+        profit: '0', // 收益
+        amount: '10000', // 用户余额
+        isHidden: true, // 控制计算器显示
+        bidInfo: {
+          bidId: '12122',
+          minInvest: 100,
+          investAmount: 30,
+          time: 10,
+          profit: '10.8%',
+          aviableAmount: 1000,
+          maxInvest: 10000,
+          timeType: 'month'
+        }
+      }
+      config = {
+        enablePullDownRefresh: true
+      }
+      computed = {
+        // 传给输入框内容
+        placeholder() {
+          return this.bidInfo.minInvest + '元起投'
+        },
+        anotherProfit() {
+          return this.profit + '元'
+        },
+        // 传给计算器内容
+        timeType() {
+          return this.bidInfo.timeType
+        },
+        time() {
+          return this.bidInfo.time
+        },
+        calProfit() {
+          return this.bidInfo.profit
+        }
+      }
+      components = {
+        inputera: inputer,
+        inputerb: inputer,
+        inputerc: inputer,
+        cal
+      }
+      watch = {
+        value(n, o) {
+          let limit
+          if (this.bidInfo.timeType === 'day') {
+            limit = this.bidInfo.time / 30 / 12
+          } else if (this.bidInfo.timeType === 'month') {
+            limit = this.bidInfo.time / 12
+          } else if (this.bidInfo.timeType === 'year') {
+            limit = this.bidInfo.time
+          }
+          this.profit = (limit * parseFloat(this.bidInfo.profit) * n / 100).toFixed(2)
+          this.$apply()
+        },
+        cur(n, o) {
+          this.left = this.lineOffset + (this.windowWidth / 3) * n
+          this.$apply()
+        }
+      }
+      events = {
+        getValue(n, id, v) {
+          this.value = v
+          this.$apply()
+        }
+      }
+      methods = {
+        changeItem(i) { // 改变下边栏
+          this.cur = i
+          this.$apply()
+        },
+        changeCur(e) {
+          this.cur = e.detail.current
+          this.$apply()
+        },
+        chargePage() {
+          wepy.navigateTo()
+        },
+        openCal() {
+          this.isHidden = false
+          console.log(this.isHidden)
+          this.$apply()
+        }
+      }
+      async onLoad(options) {
+        let systemInfo = wepy.getStorageSync(SYSTEM_INFO)
+        let windowHeight = systemInfo.windowHeight
+        let windowWidth = systemInfo.windowWidth
+        this.windowWidth = windowWidth
+        this.height = windowHeight - 50
+        this.lineOffset = ((windowWidth / 3) - this.lineLength) / 2
+        this.left = this.lineOffset
+        this.$apply()
+      }
+    }
+</script>

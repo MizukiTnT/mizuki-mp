@@ -1,0 +1,327 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+  .msg {
+    .edit {
+      position: relative;
+      padding: 10rpx 0;
+      border-bottom: 1px solid @border-color-normal;
+      .all {
+        width: 35rpx;
+        height: 35rpx;
+        transition: all .5s;
+        border: 1px solid @border-color-normal;
+        border-radius: 50%;
+        transform: translate(-38rpx,0);
+        opacity: 0;
+        &.sel {
+          background-color: @color-emphasis;
+        }
+        &.left {
+          opacity: 1;
+          transform: translate(20rpx,0);
+        }
+      }
+      .del {
+        position: absolute;
+        right: 125rpx;
+        color: @color-emphasis;
+        top: 4rpx;
+        font-size: 14px;
+        transition: all .5s;
+      }
+      .control {
+        position: absolute;
+        right: 35rpx;
+        top: 4rpx;
+        font-size: 14px;
+      }
+    }
+    .content {
+      .item {
+        position: relative;
+        padding: 10rpx 65rpx 0;
+        &.clicked {
+          color: @color-sub;
+        }
+        .controll {
+          display: none;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 10;
+          &.show {
+            display: block;          
+          }
+        }
+        .list-item {
+          position: relative;
+          padding: 0 0 30rpx;
+          border-bottom: 1px solid @border-color-sub;          
+          .head {
+            position: relative;
+            padding: 10rpx 0;
+            font-size: 16px;
+            .time {
+              position: absolute;
+              right: 0;
+              top: 18rpx;
+              font-size: 12px;
+              line-height: 16px;
+            }
+          }
+          .catlog {
+            padding: 0 10rpx;
+            font-size: 13px;
+            display: -webkit-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
+          .arrow {
+            position: absolute;
+            width: 25rpx;
+            height: 40rpx;
+            top: 60%;
+            right: -40rpx;
+            transform: translateY(-50%);
+          }
+          .dot {
+            position: absolute;
+            top: 55%;
+            left: -20rpx;
+            width: 35rpx;
+            height: 35rpx;
+            transition: all .5s;
+            border: 1px solid @border-color-normal;
+            border-radius: 50%;
+            transition: all .5s;
+            transform: translate(-80rpx,-50%);
+            opacity: 0;
+            &.show {
+              opacity: 1;
+              transform: translate(-20rpx,-50%);
+            }
+          }
+          .doted {
+            background-color: @color-emphasis;
+          }
+        }
+      }     
+    }
+  }
+</style>
+
+<template>
+    <view class="msg">
+      <!-- 编辑栏 _S -->
+      <view class="edit">
+        <view @tap="all" class="all {{change ? 'left' : ''}} {{all ? 'sel' : ''}}"></view>
+        <view @tap="del" class="del">{{change ? '删除' : ''}}</view>
+        <view @tap="showEdit" class="control">{{change ? '取消' : '编辑'}}</view>
+      </view>
+      <!-- 编辑栏 _E -->      
+      <view class="content">
+        <!-- 未点击具体栏 _S -->
+        <view class="msg-wrapper"
+          wx:for="{{unclick}}"
+          wx:for-item="item"
+          wx:for-index="index" 
+          class="item click"
+          wx:key="i">
+          <!-- 控制层遮罩 _S -->
+          <view class="controll {{change ? 'show' : ''}}" @tap="changeCondition({{index}})">
+          </view>
+          <!-- 控制层遮罩 _E -->
+          <view
+          class="list-item"
+          @tap="naviTo({{index}}, {{item.title}}, {{item.time}}, {{item.content}})">
+            <!-- 标题和头 _S -->
+            <view class="head">
+              <view class="title">{{item.title}}</view>
+              <view class="time">{{item.time}}</view> 
+            </view>  
+            <!-- 标题和头 _E -->
+            <!-- 内容 _S -->
+            <view class="catlog">{{item.content}}</view>
+            <!-- 内容 _E -->
+            <!-- 箭头 _S -->
+            <image src="../assets/img/arrow.png" class="arrow"></image>
+            <!-- 箭头 _E -->
+            <!-- 左边的点 _S -->
+            <view class="dot {{change ? 'show' : ''}} {{item.select ? 'doted' : ''}}"></view>
+            <!-- 左边的点 _E -->
+          </view>          
+        </view>
+        <!-- 未点击具体栏 _E -->
+        <!-- 点击具体栏 _S -->
+        <view class="msg-wrapper"
+          wx:for="{{clicked}}"
+          wx:for-item="item"
+          wx:for-index="index"
+          class="item clicked"
+          wx:key="i">
+          <view class="controll {{change ? 'show' : ''}}" @tap="changeConditionClick({{index}})"></view>
+          <view
+          class="list-item"
+          @tap="naviTo({{index}}, {{item.title}}, {{item.time}}, {{item.content}})">
+            <view class="head">
+              <view class="title">{{item.title}}</view>
+              <view class="time">{{item.time}}</view> 
+            </view>  
+            <view class="catlog">{{item.content}}</view>
+            <image src="../assets/img/arrow.png" class="arrow"></image>
+            <view class="dot {{change ? 'show' : ''}} {{item.select ? 'doted' : ''}}"></view>            
+          </view>          
+        </view>     
+        <!-- 点击具体栏 _E -->
+      </view>
+      <view class="fixed"></view>
+    </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tips from '../utils/tips'
+  export default class msg extends wepy.page {
+    config = {
+      navigationBarTitleText: '系统消息',
+      enablePullDownRefresh: true
+    }
+    methods = {
+      showEdit() {
+        if (this.unclick.length === 0 && this.clicked.length === 0) {
+          tips.alert('暂无消息')
+          return
+        }
+        this.change = !this.change
+        if (!this.change) {
+          let arr = [...this.unclick, ...this.clicked]
+          arr.forEach(v => {
+            v.select = false
+          })
+          this.all = false
+        }
+        this.$apply()
+      },
+      all() {
+        console.log(this.unclick)
+        console.log(this.clicked)
+        this.unclick.forEach(v => {
+          v.select = !v.select
+        })
+        this.clicked.forEach(v => {
+          v.select = !v.select
+        })
+        this.all = !this.all
+        this.$apply()
+      },
+      del() {
+        let del = [] // 记录删除的信息id
+        let unclick = [] // 记录要保留下来的
+        let clicked = []
+        this.unclick.forEach((v, i) => {
+          if (!v.select) {
+            unclick.push(v)
+          } else {
+            del.push(v)
+          }
+        })
+        this.clicked.forEach((v, i) => {
+          if (!v.select) {
+            clicked.push(v)
+          } else {
+            del.push(v)
+          }
+        })
+        this.unclick = unclick
+        this.clicked = clicked
+        this.$apply()
+        if (this.unclick.length === 0 && this.clicked.length === 0) {
+          this.all = false
+          this.change = false
+          this.$apply()
+        }
+      },
+      changeCondition(index, that) {
+        this.unclick[index].select = !this.unclick[index].select
+        this.$apply()
+      },
+      changeConditionClick(index) {
+        this.clicked[index].select = !this.clicked[index].select
+        this.$apply()
+      },
+      naviTo(i, title, time, content) {
+        wepy.navigateTo({
+          url: 'msgDetail?time=' + time + '&title=' + title + '&content=' + content
+        })
+      }
+    }
+    data = {
+      change: false, // 控制是否显示编辑栏
+      all: false, // 全选样式控制
+      unclick: [
+        {
+          title: '提现成功',
+          time: '2323213122',
+          content: '1都开放了酒店客房假死抵抗；老夫就撒淀粉加水淀粉加水到福建师大附近打快速反击撒酒疯撒娇方式的咖啡健康；啦3232323',
+          id: '1223',
+          select: false
+        },
+        {
+          title: '提现成功',
+          time: '2323213122',
+          content: '2都开放了酒店客房假死抵抗；老夫就撒淀粉加水淀粉加水到福建师大附近打快速反击撒酒疯撒娇方式的咖啡健康；啦43434343',
+          id: '12233',
+          select: false
+        },
+        {
+          title: '提现成功',
+          time: '2323213122',
+          content: '3都开放了酒店客房假死抵抗；老夫就撒淀粉加水淀粉加水到福建师大附近打快速反击撒酒疯撒娇方式的咖啡健康；啦434343',
+          id: '21211223',
+          select: false
+        },
+        {
+          title: '提现成功',
+          time: '2323213122',
+          content: '4都开放了酒店客房假死抵抗；老夫就撒淀粉加水淀粉加水到福建师大附近打快速反击撒酒疯撒娇方式的咖啡健康；啦43434343',
+          id: '122345454',
+          select: false
+        }
+      ],
+      clicked: [
+        {
+          title: '提现成功',
+          time: '2323213122',
+          content: '1都开放了酒店客房假死抵抗；老夫就撒淀粉加水淀粉加水到福建师大附近打快速反击撒酒疯撒娇方式的咖啡健康；啦',
+          id: '1223fd',
+          select: false
+        },
+        {
+          title: '提现成功',
+          time: '2323213122',
+          content: '2都开放了酒店客房假死抵抗；老夫就撒淀粉加水淀粉加水到福建师大附近打快速反击撒酒疯撒娇方式的咖啡健康；啦',
+          id: '1223dfd',
+          select: false
+        },
+        {
+          title: '提现成功',
+          time: '2323213122',
+          content: '3都开放了酒店客房假死抵抗；老夫就撒淀粉加水淀粉加水到福建师大附近打快速反击撒酒疯撒娇方式的咖啡健康；啦',
+          id: '1223433',
+          select: false
+        },
+        {
+          title: '提现成功',
+          time: '2323213122',
+          content: '4都开放了酒店客房假死抵抗；老夫就撒淀粉加水淀粉加水到福建师大附近打快速反击撒酒疯撒娇方式的咖啡健康；啦',
+          id: '12434323',
+          select: false
+        }
+      ]
+    }
+  }
+</script>

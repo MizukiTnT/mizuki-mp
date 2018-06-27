@@ -1,0 +1,216 @@
+<style lang="less">
+    page {
+        height: 100%;
+    }
+    .article {
+        height: 100%;
+        background-color: #f7f7f7;
+        .p-text {
+            background-color: #fd5353;
+            &:nth-child(2) {
+                margin-top: 20rpx;
+            }
+            .wrapper {
+                position: relative;
+                .title {
+                    padding: 5rpx 10rpx;
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    color: #fff;
+                    letter-spacing: 1px;
+                    font-size: 15px;
+                    background-color: rgba(0,0,0,.4);
+                }
+            }
+            .link {
+                position: relative;
+                padding: 10rpx 15rpx;
+                background-color: #fff;
+                font-size: 16px;
+                .text {
+                    width: 100%;
+                    display: inline-block;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+                navigator {
+                    position: absolute;
+                    right: 15rpx;
+                    width: 16%;
+                    display: inline-block;
+                    color: #fd5353;
+                    text-align: right;
+                }
+            }
+            image {
+                height: 290rpx;
+                width: 100%;
+                display: block
+            }
+        }
+        .grid {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;   
+            margin-top: 15rpx;
+            &:last-child {
+                margin-bottom: 0;
+            }    
+            .grid-item {
+                padding: 15rpx 0;
+                flex: 1 0 33.33%;
+                font-size: 0;
+                text-align: center;
+                background-color: #fff;
+                box-sizing: border-box;
+                box-shadow: 0 0 5px rbga(0,0,0,.2);
+                image {
+                    display: inline-block;
+                    width: 70rpx;
+                    height: 70rpx;
+                }
+                >view {
+                    margin-top: 15rpx;
+                    position: relative;
+                    font-size: 14px;
+                    .new {
+                        display: inline-block;
+                        position: absolute;
+                        width: 10rpx;
+                        height: 10rpx;
+                        border-radius: 50%;
+                        background-color: #fd5353;
+                    }
+                }
+            }
+        }
+    }
+</style>
+
+<template>
+    <view class="article">
+        <!-- 图文banner _S -->
+        <view class="p-text">
+            <view class="wrapper">
+                <image url=""></image>
+                <view class="title">最新活动</view>
+            </view>
+            <view class="link">
+                <text class="text">邀请好友得现金，人脉变钱脉</text>
+            </view>
+        </view>
+        <!-- 图文banner _E -->
+        <view class="p-text">
+            <view class="wrapper">
+                <image url=""></image>
+                <view class="title">来融动态</view>
+            </view>
+            <view class="link">
+                <text class="text" style="width:83%">金融科技助理乡镇快消企业，全新“随手贷”哈哈hahahah</text>
+                <navigator url="./dynamic">更多>></navigator>
+            </view>      
+        </view>
+        <!-- 功能栏 _S -->
+        <view class="grid">
+            <repeat for="{{list.first}}" key="index" index="index" item="item">
+                <view
+                 wx:if="{{item.url}}" 
+                @tap="open({{item.url}})"
+                class="grid-item">
+                    <image src="../assets/img/art-icon{{index}}.png"></image>
+                    <view>{{item.text}} <view class="new" wx:if="{{index === 0}}"></view></view>
+                </view>
+                <view 
+                wx:if="{{item.src}}"
+                @tap="naviTo({{item.src}})"
+                class="grid-item">
+                    <image src="../assets/img/art-icon{{index}}.png"></image>
+                    <view>{{item.text}}</view>
+                </view>         
+            </repeat>
+            <repeat for="{{list.last}}" key="index" index="index" item="item">
+                <view
+                 wx:if="{{item.url}}" 
+                @tap="open({{item.url}})"
+                class="grid-item">
+                    <image src="../assets/img/art-icon-{{index}}.png"></image>
+                    <view>{{item.text}}</view>
+                </view>
+                <view 
+                wx:if="{{item.src}}"
+                @tap="naviTo({{item.src}})"
+                class="grid-item">
+                    <image src="../assets/img/art-icon-{{index}}.png"></image>
+                    <view>{{item.text}}</view>
+                </view>         
+            </repeat>            
+        </view>
+        <!-- 功能栏 _E -->
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import tips from '../utils/tips'
+    export default class article extends wepy.page {
+      data = {
+        list: {
+          first: [ // 根据url和src条件渲染即可
+            {
+              url: './report', // 如果跳页面则有url
+              text: '最新公告'
+            },
+            {
+              src: 'www.baidu.com', // 如果是跳web-view则有src
+              text: '了解来融'
+            },
+            {
+              src: 'www.lai.cn',
+              text: '银行存管'
+            }
+          ],
+          last: [
+            {
+              url: './seasonReport',
+              text: '运营报告'
+            },
+            {
+              src: 'www.lai.cn/front/home.html',
+              text: '新手指引'
+            },
+            {
+              url: './helpCenter',
+              text: '客服中心'
+            }
+          ]
+        }
+      }
+      methods = {
+        open(url) { // 这两个都是打开页面 不同的是 open是打开不同Page naviTo 是去web-view页面 而 url是页面的参数 本来可以写在一起 我傻了 忘记动态绑定属性要加冒号
+          tips.loading()
+          wepy.navigateTo({
+            url: url
+          }).then(() => {
+            tips.loaded()
+          }, () => {
+            tips.loaded()
+            tips.error('网络异常')
+          })
+        },
+        naviTo(url) {
+          tips.loading()
+          wepy.navigateTo({
+            url: './webview?url=' + url
+          }).then(() => {
+            tips.loaded()
+          }, () => {
+            tips.loaded()
+            tips.error('网络异常')
+          })
+        }
+      }
+    }
+</script>

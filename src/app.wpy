@@ -1,0 +1,143 @@
+<style lang="less">
+@import './assets/style/weui.less';
+@import './assets/style/base/base.less';
+body {
+  font-family: @font-family;
+}
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
+/* 顶层公用样式 */
+.color-gray {
+  color: @color-sub;
+  font-size: 10px;
+}
+.color-light-gray {
+  color: @color-sub;
+  font-size: 12px;
+}
+.emphasis {
+  color: @color-emphasis;
+  font-size: 14px;
+}
+
+.lai-tit {
+  position: relative;
+  margin-bottom: 15rpx;
+  font-size: 15px;
+  .dot {
+    margin-right: 10rpx;
+    display: inline-block;
+    width: 10rpx;
+    height: 20rpx;
+    background-color: @color-emphasis;
+    border-radius: 10rpx;
+  }
+  .slot {
+    display: inline-block;
+    position: absolute;
+    right: 10rpx;
+    font-size: 11px;
+    color: @color-sub;
+  } 
+}
+
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+import {SYSTEM_INFO} from './utils/constant'
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/index',
+      'pages/invest',
+      'pages/account',
+      'pages/details',
+      'pages/userCenter',
+      'pages/cards',
+      'pages/vertification',
+      'pages/laiFriends',
+      'pages/articles',
+      'pages/bidDetail',
+      'pages/msg',
+      'pages/msgDetail',
+      'pages/report',
+      'pages/redPocket',
+      'pages/seasonReport',
+      'pages/dynamic',
+      'pages/paycheck',
+      'pages/friendsCount',
+      'pages/awards',
+      'pages/charge',
+      'pages/withdraw',
+      'pages/bidTrans',
+      'pages/transDetail',
+      'pages/login',
+      'pages/loanIndex',
+      'pages/webview'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#fff',
+      navigationBarTitleText: '来融金服',
+      navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: '#999',
+      selectedColor: '#fd5353',
+      backgroundColor: '#f5f5f5',
+      list: [
+        {
+          pagePath: 'pages/index',
+          text: '首页',
+          iconPath: 'assets/img/index.png',
+          selectedIconPath: 'assets/img/index2.png'
+        },
+        {
+          pagePath: 'pages/laiFriends',
+          text: '来友',
+          iconPath: 'assets/img/laiyou@3x.png',
+          selectedIconPath: 'assets/img/laiyou2@3x.png'
+        },
+        {
+          pagePath: 'pages/articles',
+          text: '发现',
+          iconPath: 'assets/img/faxian@3x.png',
+          selectedIconPath: 'assets/img/faxian2@3x.png'
+        },
+        {
+          pagePath: 'pages/account',
+          text: '账户',
+          iconPath: 'assets/img/zhanghu@3x.png',
+          selectedIconPath: 'assets/img/zhanghu2@3x.png'
+        }
+      ]
+    }
+  }
+
+  globalData = {
+    userInfo: null,
+    requestUrl: '',
+    appid: 'wx965c95b2780f8d2f',
+    secret: '615ae6a538d3ff3548b42056fcb8781a'
+  }
+
+  constructor () {
+    super()
+    this.use('promisify')
+    this.use('requestfix')
+  }
+  async onLaunch() {
+    let b = await wepy.getSystemInfo()
+    wepy.setStorageSync(SYSTEM_INFO, b)
+  }
+}
+</script>

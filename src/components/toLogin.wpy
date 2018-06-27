@@ -1,0 +1,62 @@
+<style lang="less" scoped>
+@import '../assets/style/base/base.less';
+  .tologin {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: #fff;
+    .wrapper {
+      position: absolute;
+      top: 33%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      text-align: center;
+      .logo {
+        width: 386rpx;
+        height: 128rpx;
+        margin-bottom: 50rpx;
+      }
+      .text {
+        font-size: 15px;
+        color: @color-main;
+        margin-bottom: 40rpx;
+      }
+      .button {
+        display: inline-block;
+        width: 85%;
+        padding: 15rpx 0;
+        color: #fff;
+        text-align: center;
+        font-size: 15px;
+        background-color: @color-emphasis;
+        border-radius: 4px;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="tologin">
+    <view class="wrapper">
+      <image class="logo" src="../assets/img/logo.png"></image>
+      <view class="text">您还未登录，快去登录吧</view>
+      <view @tap="tologin" class="button">去登录</view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class toLogin extends wepy.component {
+    methods = {
+      tologin() {
+        wepy.navigateTo({
+          url: './login'
+        })
+      }
+    }
+  }
+</script>

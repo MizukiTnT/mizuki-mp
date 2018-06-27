@@ -1,0 +1,178 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+.navbar {
+    .page,
+    .page__bd{
+        height: 100%;
+    }
+    .page__bd{
+        padding-bottom: 0;
+        .weui-tab__panel {
+          padding: 0;
+        }
+    }
+    .weui-tab__content{
+        padding-top: 60px;
+        text-align: center;
+    }
+    .weui-navbar__slider {
+      background-color: #fd5353;
+    }
+    .weui-navbar__item.weui-bar__item_on {
+      color: #fd5353;
+    }
+    .weui-navbar {
+      position: static;
+
+    }
+}
+.info {
+  background-color: #fd5353;
+  .info-item {
+    width: 50%;
+    padding: 15px 0;
+    display: inline-block;
+    font-size: 13px;
+    text-align: center;
+    color: #fff;
+  }
+}
+.tab_swpier {
+  .weui-tab__content {
+    background-color: #f7f7f7;
+    padding-top: 0;
+  }
+}
+.details {
+  position: relative;
+  .loan-button {
+    position: fixed;
+    top: 155rpx;
+    right: 15rpx;
+    color: @color-emphasis;
+    border: 1px solid @border-color-normal;
+    border-radius: 50%;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: #fff;
+    padding: 20rpx 15rpx;
+  }
+}
+</style>
+<template>
+  <view class='details'>
+    <!-- 投资标题 _S -->
+    <view class='info' wx:if='{{type==0}}'>
+      <view class='info-item'>
+        <view>本月投资金额（元）</view>
+        <view>{{infos.currMonInvestAmount}}</view>
+      </view>
+      <view class='info-item'>
+        <view>投资金额（元）</view>
+        <view>{{infos.totalInvestAmount}}</view>
+      </view>
+    </view>
+    <!-- 投资标题 _E -->
+    <!-- 回款标题 _S -->
+    <view class='info' wx:if='{{type==2}}'>
+      <view class='info-item'>
+        <view>本月待回款金额（元）</view>
+        <view>{{infos.currMonInvestAmount}}</view>
+      </view>
+      <view class='info-item'>
+        <view>待回款金额（元）</view>
+        <view>{{infos.totalInvestAmount}}</view>
+      </view>
+    </view>    
+    <!-- 回款标题 _E -->
+    <!-- tab栏 _S -->
+    <view class="navbar page" wx:if="{{tabs === '' ? false : true}}">
+        <view class="page__bd">
+            <view class="weui-tab">
+                <view class="weui-navbar">
+                    <view wx:for="{{tabs}}" wx:key="*this" id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" @tap="tabClick">
+                        <view class="weui-navbar__title">{{item}}</view>
+                    </view>
+                    <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+                </view>
+            </view>
+            <view duration="1500"
+              bindchange="changeIndex"
+              class="weui-tab__panel tab_swpier">
+                  <scroll :topHeight.sync="childTopHeight" class="weui-tab__content" hidden="{{activeIndex != 0}}">选项二的内容</scroll>   
+                  <scroll :topHeight.sync="childTopHeight"  class="weui-tab__content" hidden="{{activeIndex != 1}}">选项二的内容</scroll>   
+                  <scroll :topHeight.sync="childTopHeight"  class="weui-tab__content" hidden="{{activeIndex != 2}}">选项</scroll> 
+            </view>            
+        </view>
+    </view>
+    <!-- tab栏 _E -->
+    <!-- 借款按钮 _S -->
+    <navigator wx:if="{{type === '2'}}" url="loanIndex" class="loan-button">借款</navigator>
+    <!-- 借款按钮 _E -->
+  </view>
+</template>
+<script>
+import wepy from 'wepy'
+import scroll from '@/components/verticalScroll'
+const sliderWidth = 116 // 需要设置slider的宽度，用于计算中间位置
+export default class details extends wepy.page {
+  data = {
+    type: null,
+    tabs: null, // 数据无法获取 只能写死来判断
+    activeIndex: 0,
+    sliderOffset: 0,
+    sliderLeft: 0,
+    childTopHeight: 50,
+    infos: null
+  }
+  components = {
+    scroll
+  }
+  methods = {
+    tabClick (e) {
+      this.sliderOffset = e.currentTarget.offsetLeft
+      this.activeIndex = e.currentTarget.id
+    }
+  }
+  config = {
+    navigationBarTitleText: ''
+  }
+
+  events = {
+    'childRequestOk': (infos, $event) => {
+      console.log(infos)
+      this.infos = infos
+      this.$apply()
+    },
+    'childRequestFailed': (infos, $event) => {
+      console.log('请求失败')
+    }
+  }
+
+  async onLoad(options) {
+    this.type = options.type // 根据传递参数决定tab栏内容
+    if (this.type === '0') {
+      this.tabs = ['招标中', '还款中', '已结清']
+      wepy.setNavigationBarTitle({title: '我的投资'})
+    } else if (this.type === '1') {
+      this.tabs = ['待回款', '已回款']
+      wepy.setNavigationBarTitle({title: '我的回款'})
+    } else if (this.type === '2') {
+      this.tabs = ['借款中', '已还款']
+      wepy.setNavigationBarTitle({title: '我的借款'})
+    } else {
+      this.tabs = ['转让债权', '受让债权']
+      wepy.setNavigationBarTitle({title: '我的债转'})
+    }
+    if (options.type === '0' || options.type === '2') {
+      this.childTopHeight = 120
+    }
+    let res = await wepy.getSystemInfo() // 获取屏幕宽
+    this.sliderLeft = (res.windowWidth / this.tabs.length - sliderWidth) / 2 // 计算下边栏偏移距离
+    this.sliderOffset = res.windowWidth / this.tabs.length * this.activeIndex // 计算下边栏移动距离
+    this.sliderWidth = res.windowWidth / this.tabs.length * this.activeIndex
+    console.log(new Date().toJSON().substr(0, 10))
+    this.$apply()
+  }
+}
+</script>

@@ -1,0 +1,158 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+  .withdraw {
+    padding: 0 35rpx;
+    .notice {
+      margin-top: 15rpx;
+      font-size: 14px;
+      text-align: right;
+      color: #409eff;
+    }
+    .footer {
+      margin-top: 250rpx;
+      .text {
+        margin-top: 25rpx;
+        text-align: center;
+        font-size: 15px;
+      }
+      .phonecall {
+        color: @color-emphasis;
+        text-align: center;
+        font-size: 13px;
+      }
+    }
+    #layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      background-color: rgba(0,0,0,.2);
+      .content {
+        width: 85%;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        padding: 25rpx 80rpx;
+        box-sizing: border-box;
+        transform: translate(-50%,-50%);
+        border-radius: 5px;
+        background-color: #fff;
+        .title {
+          padding: 15rpx 0;
+          margin-bottom: 25rpx;
+          text-align: center;
+          font-size: 14px;
+        }
+        .text {
+          font-size: 13px;
+          &:last-child {
+            margin-bottom: 15rpx;
+          }
+          .em {
+            color: @color-emphasis;
+          }
+        }        
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="withdraw">
+    <view class="form">
+      <money disabled
+      marb="0"
+      placeholderStyle="color:#fd5353"
+      placeholder=".5元">
+        <view slot="subtitle" class="subtitle">可提现金额</view>
+      </money>
+      <inputer
+      type="number"
+      style="color:#fd5353"
+      identity="chargeMoney"
+      :inputValue.sync="value"
+      placeholder="请输入提现金额"
+      marb="0">
+        <view slot="subtitle" class="subtitle">提现金额</view>
+        <view style="font-size:14px" slot="money">元</view>
+      </inputer>
+      <charge 
+      disabled
+      marb="0" 
+      placeholderStyle="color:#fd5353"
+      placeholder="1.00元">
+        <view slot="subtitle" class="subtitle">提现手续费</view>
+      </charge>      
+    </view>
+    <view class="notice" id="notice" @tap="open">提现须知</view>
+    <view class="footer">
+      <button type="warn">下一步</button>
+      <view class="text">如果您提现遇到问题请联系客服</view>
+      <view class="phonecall">400-915-1000</view>
+    </view>    
+    <view class="layer" hidden="{{isClose}}" @tap="close" id="layer">
+      <view class="content">
+        <view class="title">提现须知</view>
+        <view class="text">
+          <view>1.提现金额<text class="em">≤5万， 实时到账</text></view>
+          <view>2.提现金额<text class="em">>5万</text>,<text class="em">T+1</text>个工作日到账，提现时间为工作日<text class="em">9:30-16:45</text>。
+          </view>
+          <view>3.每日最多只能体现<text class="em">10次</text></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import tips from '../utils/tips'
+import inputer from '../components/input'
+export default class withdraw extends wepy.page {
+  config = {
+    navigationBarTitleText: '提现'
+  }
+  components = {
+    money: inputer,
+    inputer: inputer,
+    charge: inputer
+  }
+  data = {
+    isClose: true,
+    value: null,
+    infos: {
+      balance: 4
+    }
+  }
+
+  events = {
+    getValue(n, id, value) {
+      if (this.value > this.infos.balance - 1) {
+        tips.alert('余额不足')
+        if(this.infos.balance < 1) {
+          this.value = 0
+        } else {
+          this.value = this.infos.balance - 1
+        }
+      }
+    }
+  }
+
+  methods = {
+    close(e) {
+      if (e.target.id === 'layer') {
+        this.isClose = true
+        this.$apply()
+      }
+    },
+    open(e) {
+      if (e.target.id === 'notice') {
+        this.isClose = false
+        this.$apply()
+      }
+    }    
+  }
+}
+</script>

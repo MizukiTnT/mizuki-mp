@@ -1,0 +1,12 @@
+<style lang="less" scoped>
+
+</style>
+
+<template>
+  <webview src="www.baidu.com"></webview>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class webview extends wepy.page {}
+</script>

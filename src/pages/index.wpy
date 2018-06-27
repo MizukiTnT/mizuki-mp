@@ -1,0 +1,329 @@
+<style lang="less">
+@red: #fd5353;
+@border-color: #EBEEF5;
+/* 轮播图样式 */
+.lai-carousel {
+  height: 300rpx;
+  overflow-x: hidden;
+  .carousel-item {
+    width: 25%;
+    height: 100%;
+    display: inline-block;
+    font-size: 0;
+    &.bg1 {
+      background-color: red;
+    }
+    &.bg2 {
+      background-color: green;
+    }
+    &.bg3 {
+      background-color: gray;
+    }
+    &.bg4 {
+      background-color: skyblue;
+    }
+  }
+  .carousel-item image {
+    width: 100%;
+    height: 100%;
+  }
+}
+  /* 下方信息公告 */
+  .lai-report {
+    display: flex;
+    padding: 15rpx 0;
+    border-bottom: 5px solid @border-color;
+    .report-list {
+      flex: 1 1 33.33%;
+      text-align: center;
+      font-size: 13px;
+    }
+    .top-section {
+      display: flex;
+      justify-content: center;
+      .text {
+        color: @red;
+        margin-left: 5rpx;
+      }
+      image {
+        width: 15px;
+        height: 15px;
+      }      
+    }
+  }
+  /* 推荐标样式 */
+.recommend-bid {
+  padding: 10rpx 10rpx 30rpx;
+  border-bottom: 5px solid @border-color;
+  .recommend-content{
+    .profit {
+      display: block;
+      margin-bottom: 15rpx;
+      text-align: center;
+      color: #fd5353;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .bid-detail {
+      margin-top: 30rpx;
+      font-size: 12px;
+      text-align: center;
+      >text:nth-child(1) {
+        margin-right: 100rpx;
+      }
+    }
+    >navigator {
+      margin-top: 15px;
+      text-align: center;
+      >text {
+        padding: 10rpx 100rpx;
+        color: #fff;
+        border-radius: 10px;
+        font-size: 13px;
+        background-color: #fd5353;
+      }
+    }
+  }
+}
+  /* 债权样式 */
+  .bid-trans {
+    padding: 10rpx;
+    .detail {
+      >text {
+        display: inline-block;
+        width: 33.33%;
+        font-size: 13px;
+        text-align: center;
+      }
+    }
+    .btn {
+      text-align: center;
+      margin-top: 5rpx;
+      text {
+        font-size: 12px;
+        text-decoration: underline;
+        color: #fd5353;
+      }
+    }
+}
+</style>
+<template lang="wxml">
+  <view>
+    <view class='top-loading' wx:if='{{loading}}'>来融来融,你来我融！</view>
+        <!-- 轮播图 _S -->
+    <swiper class="lai-carousel" 
+      indicator-dots='{{carousel.options.indicatorDots}}'
+      circular="true"
+      interval='{{carousel.options.interval}}'
+      duration='{{carousel.options.duration}}'
+      autoplay='{{carousel.options.autoplay}}'>
+      <swiper-item wx:key="i" wx:for="{{carousel.src}}" 
+        wx:for-index="index" 
+        wx:for-item="item"
+        class="carousel-item bg{{index+1}}">
+        <image src="{{item.src}}" scaleToFill></image>
+    </swiper-item>
+  </swiper>
+  <!-- 轮播图 _E -->
+    <!-- 业绩 _S -->
+  <view class="lai-report">
+    <view class='report-list'>
+      <view class='top-section'>
+        <image src='../assets/img/ic_1.png'></image>
+        <text class='text'>{{plateReport.customerCount}}</text>
+        <text>人</text>
+      </view>
+      <text class='color-gray'>理财人数</text>
+    </view>
+    <view class='report-list'>
+      <view class='top-section'>
+        <image src='../assets/img/ic_2.png'></image>
+        <text class='text'>{{plateReport.investCount}}</text>
+        <text>亿</text>
+      </view>
+      <text class='color-gray'>投资总额</text>
+    </view>
+    <view class='report-list'>
+      <view class='top-section'>
+        <image src='../assets/img/ic_3.png'></image>
+        <text class='text'>{{plateReport.profitAmount}}</text>
+        <text>万</text>
+      </view>
+      <text class='color-gray'>收益总额</text>
+    </view>        
+  </view>
+  <!-- 业绩 _E -->
+    <!-- 推荐标 _S -->
+  <view class='recommend-bid'>
+    <view class='lai-tit'>
+      <view class='dot'></view>
+      <text>热门推荐</text>
+    </view>
+    <view class='recommend-content'>
+      <text class='profit'>{{recommendBid.profit}} </text>
+      <text class='color-light-gray' style='text-align: center;display:block'>预期年化</text>
+      <view class='bid-detail'>
+        <text>项目规模:<text class='emphasis'>{{recommendBid.amount}}</text><text></text> 元 </text>
+        <text>项目期限:<text class='emphasis'>{{recommendBid.limit}}</text>个月</text>
+      </view>
+      <navigator url='../logs/logs' open-type="navigate" >
+        <text>立即投资</text>
+      </navigator>
+    </view>
+  </view>
+  <!-- 推荐标 _E -->
+  <!-- 标的列表 _S -->
+    <bid :list='bidList'>
+      <view 
+      slot='title'
+      class='lai-tit'>
+        <view class='dot'></view>
+        <text>投资理财</text>
+        <navigator
+        url='./invest'
+        open-type='navigate'
+        class='slot'>查看更多>></navigator>
+      </view>
+
+    </bid>
+  <!-- 标的列表 _E -->
+    <!-- 债转 _S -->
+  <view class='bid-trans'>
+    <view class='lai-tit'>
+      <view class='dot'></view>
+      <text>债权转让</text>
+      <navigator 
+      url="./bidTrans"
+      open-type='navigate' 
+      class='slot'>查看更多>></navigator>
+    </view>
+    <navigator 
+      url='./transDetail'
+      open-type='navigate'>
+        <view class='detail'>
+          <text>让利:<text>{{bidTrans.share}}</text>元</text>
+          <text>期限:<text>{{bidTrans.limit}}</text>天</text>
+          <text>价格:<text>{{bidTrans.price}}</text>元</text>
+        </view>
+        <view class='btn'>
+          <text>{{bidTrans.transState === 0 ? "立即购买" : "已转让"}}</text>
+        </view>
+      </navigator>
+  </view>
+  <!-- 债转 _E -->
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import bid from '@/components/bidList'
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: '来融金服',
+    enablePullDownRefresh: true
+  }
+  components = {
+    bid: bid
+  }
+
+  data = {
+    carousel: { //  轮播图配置
+      options: {
+        indicatorDots: false,
+        autoplay: true,
+        interval: 3000,
+        duration: 1000
+      },
+      src: [
+        {
+          src: ''
+        },
+        {
+          src: ''
+        },
+        {
+          src: ''
+        },
+        {
+          src: ''
+        }
+      ]
+    },
+    plateReport: { // 平台信息
+      customerCount: 1000, // 理财
+      investCount: 1.234, //  总额
+      profitAmount: 2088 // 收益
+    },
+    recommendBid: {
+      limit: '10',  //  推荐项目期限
+      profit: '15%', // 推荐收益
+      amount: '100' //  推荐规模
+    },
+    bidList: [
+      {
+        amount: '100',
+        profit: '10.8',
+        limit: '6',
+        progress: '6.4',
+        bidId: '10055', //  标id 用于详情请求
+        title: '金猪宝Y20170203',
+        state: 0 // 是否有mark 0无 1加息 2热门
+      },
+      {
+        amount: '100',
+        profit: '10.8',
+        limit: '6',
+        progress: '6.4',
+        bidId: '10055',
+        title: '金猪宝Y20170203',
+        state: 1
+      },
+      {
+        amount: '100',
+        profit: '10.8',
+        limit: '6',
+        progress: '6.4',
+        bidId: '10055',
+        title: '金猪宝Y20170203',
+        state: 2
+      },
+      {
+        amount: '100',
+        profit: '10.8',
+        limit: '6',
+        progress: '6.4',
+        bidId: '10055',
+        title: '金猪宝Y20170203',
+        state: 0
+      }
+    ],
+    bidTrans: {
+      share: '1000',
+      limit: '13',
+      price: '10000',
+      transState: 0
+    },
+    loading: false // 下拉加载状态
+  }
+
+  computed = {}
+
+  methods = {}
+
+  events = {}
+
+  onLoad() {}
+
+  onLaunch() {}
+
+  onPullDownRefresh() {
+    let _this = this
+    _this.loading = true
+    let timeout = setTimeout(function() {
+      _this.loading = false
+      wepy.stopPullDownRefresh()
+      clearTimeout(timeout)
+    }, 500)
+  }
+}
+</script>

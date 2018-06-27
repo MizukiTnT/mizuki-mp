@@ -1,0 +1,218 @@
+<style lang="less">
+  .vertification {
+    width: 100%;
+    overflow: hidden;
+    .tab-wrapper {
+      position: relative;
+      left: 0;
+      box-sizing: border-box;
+      transition: left .75s;
+      &.left {
+        left: -100%;
+      }
+      .tab-item {
+        display: inline-block;
+        font-size: 0;
+        padding: 25rpx 40rpx;
+        box-sizing: border-box;
+      }
+      .next {
+        background-color: #fd5353;
+        color: #fff;
+      }
+      .sure {
+        background-color: #fd5353;
+        color: #fff;
+      }
+    }
+    .warm-notice {
+      color: #606266;
+      font-size: 13px;
+      text-align: center;
+      .call {
+        color: #fd5353;
+        margin-top: 20rpx;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="vertification">
+    <!-- 修改手机绑定手机 _S -->
+    <view class="tab-wrapper {{step === 2 ? 'left' : ''}}" style="width:{{2 * width}}px" wx:if="{{openType == 1 ? true : false}}">
+      <!-- 发送验证码 _S -->
+      <view class="tab-item" style="width:{{width}}px">
+        <inputer :placeholder="phoneNumber" 
+        disabled 
+        password="true" 
+        icon="phone"
+        placeholderStyle="color:red"
+        identity="phoneNumber"></inputer>
+        <inputera 
+        placeholder="请输入短信验证码"
+        icon="mail" 
+        :interval="interval"
+        :openMsg="openMsg"
+        requestMethods=""
+        identity="phoneCode"></inputera>
+        <button class="next" @tap="next">下一步</button>
+      </view>
+      <!-- 发送验证码 _E -->
+      <!-- 修改手机号 _S -->
+      <view class="tab-item" style="width:{{width}}px">
+        <inputerb
+        icon="phone"
+        identity="confirmNumber"
+        placeholder="请输入手机号码"></inputerb>
+        <inputerc
+        icon="mail"
+        identity="confirmCode"
+        :openMsg="openMsg"
+        placeholder="请输入验证码"></inputerc>
+        <button class="sure">确定</button>
+      </view>
+      <!-- 修改手机号 _E -->
+    </view>
+    <!-- 修改手机绑定手机 _E -->
+    <!-- 修改密码 _S -->
+    <view class="tab-wrapper {{step === 2 ? 'left' : ''}}" style="width:{{2 * width}}px" wx:if="{{openType == 2 ?true : false}}">
+      <!-- 发送验证码 _S -->
+      <view class="tab-item" style="width:{{width}}px">
+        <inputer :placehoder="phoneNumber" 
+        disabled 
+        password="true" 
+        icon="phone"
+        placeholderStyle="color:red"
+        identity="phoneNumber"></inputer>
+        <inputera 
+        placehoder="请输入短信验证码"
+        icon="mail" 
+        :interval="interval"
+        :openMsg="openMsg"
+        requestMethods=""
+        identity="phoneCode"></inputera>
+        <button class="next" @tap="next">下一步</button>
+      </view>
+      <!-- 发送验证码 _E -->
+      <!-- 修改登录密码 _S -->
+      <view class="tab-item" style="width:{{width}}px">
+        <inputerb
+        icon="phone"
+        identity="confirmNumber"
+        placehoder="请设置登录密码不少于6位"></inputerb>
+        <inputerc
+        icon="mail"
+        identity="confirmCode"
+        :openMsg="openMsg"
+        placehoder="请再次输入登录密码"></inputerc>
+        <button class="sure">确定</button>
+      </view>
+      <!-- 修改登录密码 _E -->
+    </view>
+    <!-- 修改密码 _E -->
+    <!-- 底部提示 _S -->
+    <view class="warm-notice">
+      <view class="text">如果原手机丢失，请联系客服修改绑定手机号！</view>
+      <view @tap="callPhone" class="call">400-915-1000</view>
+    </view>    
+    <!-- 底部提示 _E -->
+  </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import {SYSTEM_INFO} from '../utils/constant'
+    import inputer from '../components/input'
+    import tips from '../utils/tips'
+    export default class vertification extends wepy.page {
+      components = {
+        inputer: inputer,
+        inputera: inputer,
+        inputerb: inputer,
+        inputerc: inputer
+      }
+      // props动态传值只能传顶层的变量 所以要是想传用户信息 有两种办法 一是把用户信息全部传进去 在组件里面取 但是这样就多存了数据 毕竟只需要一个变量 还是把globaldata里面的暴露在data中
+      // 还有一种 之后用到的时候再来 就是用computed 问题已经找到了 props里面不能传点语法值
+      data = {
+        openType: null,
+        phoneNumber: '15122223333',
+        pass_time: 60, // 验证码中间时间 默认60s
+        isSending: true, // 是否发送验证码
+        msgTexg: '获取验证码',
+        openMsg: true, // 因为props不动态传值 不能传递类型 所以只能在这里用一个data来传类型
+        inputers: {}, // 这里是储存的是inputer的内容 值
+        step: 1, // 判断在第几步
+        srvCode: null,
+        interval: null,
+        width: null
+      }
+      // methods 专门处理事件函数
+      methods = {
+        callPhone() {
+          wepy.makePhoneCall({
+            phoneNumber: '400-915-1000'
+          })
+        },
+        next() {
+          // 判断有没有输入内容 判断有没有请求srvCode成功
+          let srvCode = this.srvCode
+          let code = null // 用户输入的验证码
+          let phoneNumber = this.$parent // 用户的手机号
+          setTimeout(() => {
+            wepy.hideToast()
+          }, 500)
+          tips.alert('验证中')
+          code = this.inputers.phoneCode
+          phoneNumber = this.phoneNumber
+          if (srvCode === null) {
+            tips.error('请获取验证码')
+            return
+          }
+          console.log(this.inputers)
+          if (code === '' || code === null || code === undefined) {
+            tips.error('请输入验证码')
+            return
+          }
+          // 然后根据不同的type 走不同的接口
+          if (this.openType === 1) {
+            wepy.setNavigationBarTitle({title: '绑定新手机'})
+          } else if (this.openType === 2) {
+            wepy.setNavigationBarTitle({title: '输入新密码'})
+          }
+          this.step++
+          this.$apply()
+        },
+        sure() {
+
+        }
+      }
+      // events专门处理$emit等传参
+      events= {
+        getValue(v, id, c) {
+          this.inputers[id] = c
+          console.log(this.inputers)
+          this.$apply()
+        },
+        getSrvCode(srvCode) {
+          this.srvCode = srvCode
+          this.$apply()
+        }
+      }
+      onLoad(options) {
+        let that = this
+        this.width = wepy.getStorageSync(SYSTEM_INFO).windowWidth
+        if (options.type === '1') {
+          that.openType = 1
+          wepy.setNavigationBarTitle({title: '换绑手机'})
+        } else if (options.type === '2') {
+          that.openType = 2
+          wepy.setNavigationBarTitle({title: '修改密码'})
+        }
+        that.$apply()
+      }
+      onUnload() {
+        clearInterval(this.interval)
+      }
+    }
+</script>

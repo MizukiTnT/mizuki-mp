@@ -1,0 +1,190 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+ page {
+   width: 100%;
+   height: 100%;
+  .friends-count {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #fff;
+    .top {
+      flex: none;
+      padding: 10px 0;
+      background-color: @color-emphasis;
+      text-align: center;
+      .item {
+        display: inline-block;
+        width: 32%;
+        text-align: center;
+        color: #fff;
+        font-size: 12px;
+        .count {
+          margin-bottom: 10px;
+        }
+        &:nth-child(2) {
+          border-left: 1px solid #fff;
+          border-right: 1px solid #fff;
+        }
+      }
+    }
+    .banner {
+      flex: none;
+      padding: 5px 0;
+      >text {
+        display: inline-block;
+        font-size: 14px;
+        width: 25%;
+        text-align: center;
+      }
+    }
+    .flex-wrapper {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      .scroll {
+        height: 100%;
+        background-color: #f7f7f7;
+        .loading {
+          padding: 10rpx 0;
+          text-align: center;
+          font-size: 12px;
+          color: @color-normal;
+        }
+        .list {
+          min-height: 101%;
+        }
+        .nodata-box {
+          min-height: 101%;
+          position: relative;
+          .no-data {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            text-align: center;
+            .dot {
+              font-size: 50px;
+              letter-spacing: 5px;
+            }
+            .text {
+              font-size: 14px;
+              color: @color-normal;
+            }
+          }          
+        }
+      }
+    }
+  }   
+ }
+</style>
+
+<template>
+  <view class="friends-count">
+    <view class="top">
+      <view class="item">
+        <view class="count">0</view>
+        <view class="title">注册好友</view>
+      </view>
+      <view class="item">
+        <view class="count">0</view>
+        <view class="title">实名好友</view>        
+      </view>
+      <view class="item">
+        <view class="count">0</view>
+        <view class="title">理财好友</view>        
+      </view>  
+    </view>
+    <view class="banner">
+      <text>被邀请人</text>
+      <text>注册时间</text>
+      <text>实名情况</text>
+      <text>投资金额</text>
+    </view>
+    <view class="flex-wrapper" id="wrapper">
+      <scroll-view
+      style="height:{{height}}px"
+      scroll-y="true"
+      class="scroll"
+      bindscrolltoupper="refresh"
+      bindscrolltolower="load">
+        <!-- 下拉刷新 _S -->
+        <view class="loading" wx:if="{{isLoading}}">
+          <text class="weui-loading"></text>
+          <text class="loading-text">正在加载</text>
+        </view>
+        <!-- 下拉刷新 _E -->
+        <!-- 有消息 _S -->
+        <view class="list" wx:if="{{info}}">
+          <view class="item">1</view>
+          <view class="item">1</view>
+          <view class="item">1</view>
+          <view class="item">1</view>
+          <view class="item">1</view>
+          <view class="item">1</view>     
+        </view>
+        <!-- 有消息 _E -->
+        <!-- 没内容 _S -->
+        <view class="nodata-box">
+          <view class="no-data">
+            <view class="dot">...</view>
+            <view class="text">暂时没有数据</view>
+          </view>
+        </view>
+        <!-- 没内容 _E -->
+        <!-- 上拉加载 _S -->
+        <view class="loading" wx:if="{{isUpdate}}">
+          <text class="weui-loading"></text>
+          <text class="loading-text">正在加载</text>
+        </view>
+        <!-- 上拉加载 _E -->      
+      </scroll-view>      
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class friends extends wepy.page {
+  config = {
+    navigationBarTitleText: '好友统计'
+  }
+  data = {
+    isLoading: false,
+    isUpdate: false,
+    height: 0
+  }
+
+  methods = {
+    refresh() {
+      if (this.info) {
+        this.isLoading = true
+        this.$apply()
+        setTimeout(() => {
+          this.isLoading = false
+          this.$apply()
+        }, 1000)
+      }
+    },
+    load() {
+      if (this.info) {
+        this.isUpdate = true
+        this.$apply()
+        setTimeout(() => {
+          this.isUpdate = false
+          this.$apply()
+        }, 1000)
+      }
+    }
+  }
+  async onLoad() {
+    let that = this
+    var query = wepy.createSelectorQuery()
+    let wrapper = query.select('#wrapper')
+    wrapper.boundingClientRect()
+    query.exec(function(res) {
+      that.height = res[0].height
+      that.$apply()
+    })
+  }
+}
+</script>

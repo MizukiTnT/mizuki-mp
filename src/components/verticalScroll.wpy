@@ -1,0 +1,285 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+  .card-wrapper {
+    .loading {
+      padding: 15rpx 0;
+      font-size: 12px;
+      color:#999;
+      vertical-align: middle;
+      transition: all .25s;
+    }
+    .card-box {
+      padding: 20rpx;
+      .card {
+        margin-bottom: 20rpx;
+        padding: 10rpx 15rpx;
+        background-color: #fff;
+        border-radius: 3px;
+        .title {
+          position: relative;
+          padding: 10rpx 15rpx 0 15rpx;
+          text-align: left;
+          vertical-align: bottom;
+          font-size: 14px;
+          color: @color-main;
+          .navi {
+            position: absolute;
+            top: 7rpx;
+            right: 25rpx;
+            padding: 5rpx 30rpx;
+            font-size: 11px;
+            color: #fff;
+            background-color: #fd5353;
+            border-radius: 3px;
+          }
+          .time {
+            position: absolute;
+            right: 25rpx;
+            font-size: 12px;
+            color: @color-normal;
+          }
+          .dash-border {
+            position: relative;
+            width: 100%;
+            margin-top: 10rpx;
+            border-bottom: 2px dashed @border-color-sub;
+            .radiu {
+              width: 25rpx;
+              height: 25rpx;
+              position: absolute;
+              top: -8.5rpx;
+              border-radius: 50%;
+              background-color: @border-color-sub;
+              &:first-child {
+                left: -35.5rpx;
+              }
+              &:last-child {
+                right: -35.5rpx;
+              }
+            }
+          }
+        }
+        .content {
+          padding: 35rpx 0 20rpx;
+          .money {
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: @color-emphasis;
+          }
+          .title {
+            text-align: center;
+            font-size: 12px;
+            color: @color-sub;
+          }
+          .time {
+            margin-top: 35rpx;
+            font-size: 11px;
+            color: @color-normal;
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <scroll-view
+  scroll-y
+  bindscrolltoupper="reload"
+  bindscrolltolower="loadMore"
+  scroll-with-animation="true"
+  style="height:{{windowHeight - topHeight}}px"
+  class="scroll-viewer">
+    <!-- 外层遮罩 _S -->
+    <view class="card-wrapper"> 
+      <!-- 下拉刷新 _S -->
+      <view class="loading" wx:if="{{isLoading}}">
+        <text class="weui-loading"></text>
+        <text class="loading-text">正在加载</text>
+      </view>
+      <!-- 下拉刷新 _E -->
+      <view class="card-box">
+        <!-- 标的卡片 _S -->
+        <navigator class="card"
+          wx:for="{{infos.tab.list}}"
+          wx:for-item="item"
+          wx:key="index"
+          url="../pages/paycheck"
+          open-type="navigate">
+          <!-- 标的标题 _S -->
+          <view class="title">
+            <text>{{item.title}}</text>
+            <navigator wx:if="{{isTransfor}}" class="navi">转让</navigator>
+            <text class="time">{{item.hasRepayed ? "实际回款时间:" + item.hasRepayed : "回款时间：" + item.repayment_time.time}}</text>
+            <!-- dash型下边框 _S -->
+            <view class="dash-border">
+              <view class="radiu"></view>
+              <view class="radiu"></view>
+            </view>
+            <!-- dash型下边框 _E -->
+          </view>  
+          <!-- 标的标题 _E -->
+          <!-- 标的内容 _S -->
+          <view class="content">
+              <view class="weui-flex money">
+                <view class="weui-flex__item">
+                  <view class="placeholder">{{item.invest_amount}}</view>
+                </view>
+                <view class="weui-flex__item">
+                  <view class="placeholder">{{item.interest}}</view>
+                </view>
+              </view>
+              <view class="weui-flex title">
+                <view class="weui-flex__item">
+                  <view class="placeholder">投资本金</view>
+                </view>
+                <view class="weui-flex__item">
+                  <view class="placeholder">预计收益 (元)</view>
+                </view>
+              </view>
+              <view class="weui-flex time" wx:if="item.repayment_time">
+                <view class="weui-flex__item">
+                  <view class="placeholder">投标时间：{{item.repayment_time.time}}</view>
+                </view>
+                <view class="weui-flex__item">
+                  <view class="placeholder">还款时间：{{item.time.time}}</view>
+                </view>
+              </view>
+          </view>
+          <!-- 标的内容 _E -->
+        </navigator>
+        <!-- 标的卡片 _E -->
+      </view>
+      <!-- 上拉加载 _S -->
+      <view class="loading" wx:if="{{isUpdate}}">
+        <text class="weui-loading"></text>
+        <text class="loading-text">正在加载</text>
+      </view>
+      <!-- 上拉加载 _E -->
+    </view>
+    <!-- 外层遮罩 _E -->
+  </scroll-view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import utils from '@/utils/utils'
+    export default class scroll extends wepy.component {
+      data = {
+        windowHeight: 0, // 下方滚动视图高度
+        infos: {
+          error: -1,
+          totalInvestAmount: 332653,
+          currMonInvestAmount: 0,
+          tab: {
+            totalNum: 8,
+            title: '招标中',
+            list: [
+              {
+                interest: 100,
+                loan_schedule: 100,
+                invest_amount: 7000,
+                user_id: 150,
+                bid_id: 1505,
+                title: '金猪宝Y2017110232',
+                repayment_time: {
+                  time: 1522038600000
+                },
+                time: {
+                  time: 1506077596000
+                }
+              },
+              {
+                interest: 100,
+                loan_schedule: 100,
+                invest_amount: 7000,
+                user_id: 150,
+                bid_id: 1505,
+                title: '金猪宝Y2017110232',
+                repayment_time: {
+                  time: 1522038600000
+                },
+                time: {
+                  time: 1506077596000
+                }
+              },
+              {
+                interest: 100,
+                loan_schedule: 100,
+                invest_amount: 7000,
+                user_id: 150,
+                bid_id: 1505,
+                title: '金猪宝Y2017110232',
+                repayment_time: {
+                  time: 1522038600000
+                },
+                time: {
+                  time: 1506077596000
+                }
+              },
+              {
+                interest: 100,
+                loan_schedule: 100,
+                invest_amount: 7000,
+                user_id: 150,
+                bid_id: 1505,
+                title: '金猪宝Y2017110232',
+                repayment_time: {
+                  time: 1522038600000
+                },
+                time: {
+                  time: 1506077596000
+                },
+                isTransfor: true
+              }
+            ]
+          }
+        },
+        curPage: 0,
+        pageSize: 5,
+        isLoading: false, // 判断是否加载
+        isUpdate: false // 判断是否加载下一栏
+      }
+      props = {
+        topHeight: {
+          type: Number,
+          default: 50
+        }
+      }
+      async onLoad() {
+        let that = this
+        let res = await wepy.getSystemInfo()
+        this.windowHeight = res.windowHeight
+        this.infos.tab.list.forEach(v => {
+          v.repayment_time.time = utils.toNormalTime(v.repayment_time.time)
+          v.time.time = utils.toNormalTime(v.time.time)
+        })
+        setTimeout(() => {
+          if (that.infos.error === -1) {
+            that.$emit('childRequestOk', that.infos)
+          } else {
+            that.$emit('childRequestFailed', that.infos)
+          }
+        }, 1000)
+        that.$apply()
+      }
+      methods = {
+        reload(e) {
+          let that = this
+          this.isLoading = true
+          setTimeout(() => {
+            that.isLoading = false
+            that.$apply()
+          }, 1000)
+        },
+        loadMore() {
+          let that = this
+          this.isUpdate = true
+          setTimeout(() => {
+            that.isUpdate = false
+            that.$apply()
+          }, 1000)
+        }
+      }
+    }
+</script>

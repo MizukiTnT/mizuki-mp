@@ -1,0 +1,240 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+  page {
+    width: 100%;
+    height: 100%;
+    .login {
+      position: relative;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+      .wrapper {
+        position: absolute;
+        width: 100%;
+        top: 36%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        text-align: center;
+        .logo {
+          width: 386rpx;
+          height: 128rpx;
+          display: inline-block;
+          margin-bottom: 130rpx;
+        }
+        .input-wrapper {
+          display: inline-block;
+          width: 80%;
+          .lai-input {
+            display: inline-block;
+            padding: 5rpx 25rpx;
+            width: 100%;
+            text-align: left;
+            border-bottom: 1px solid @border-color-main;
+            font-size: 15px;
+            box-sizing: border-box;
+          }
+        }
+        .msg-box {
+          display: inline-block;
+          position: relative;
+          width: 80%;
+          font-size: 15px;
+          margin-top: 60rpx;
+          .msg-wrapper {
+            width: 50%;
+            .msg {
+              border-bottom: 1px solid @border-color-main;
+              padding: 5rpx 25rpx;
+              text-align: left;
+            }
+          }
+          .msgcode {
+            position: absolute;
+            right: 0;
+            top: -5rpx;
+            width: 40%;
+            padding: 5rpx 15rpx;
+            background: #188fff;
+            color: #fff;
+          }
+          .msgcode[disabled] {
+            background-color: #F8F8F8;
+            color: @color-main;
+          }
+        }
+        .go {
+          width: 80%;
+          padding: 20rpx 0;
+          margin-top: 65rpx;
+          display: inline-block;
+          background: #188fff;
+          color: #fff;
+          font-size: 15px;
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="login">
+    <view class="wrapper">
+      <image class="logo" src="../assets/img/logo.png"></image>
+      <view class="input-wrapper">
+        <input
+        @focus="focus1"
+        @blur="blur1"
+        style="{{bor1 ? 'border-bottom: 2px solid #188fff' : ''}}" type="number" class="lai-input"
+        placeholder="请输入手机号"></input>
+      </view>
+      <view class="msg-box">
+        <view class="msg-wrapper">
+          <input
+          @focus="focus2"
+          @blur="blur2"
+          style="{{bor2 ? 'border-bottom: 2px solid #188fff' : ''}}"
+          placeholder="请输入验证码"
+          class="msg"></input>
+        </view>
+        <button size="mini" disabled="{{isSending}}" @tap="sendMsg" class="msgcode">{{msgText}}</button>
+      </view>
+      <view class="go"  @tap="login">登录</view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {USER_INFO, LOGIN_CONDITION} from '../utils/constant'
+  import tips from '../utils/tips'
+  var interval
+  export default class longin extends wepy.page {
+    config = {
+      navigationBarTitleText: '登录'
+    }
+    data = {
+      disabled: false,
+      msgText: '获取验证码', // 验证码文本
+      pass_time: 60, // 验证码间隔时间
+      isSending: false, // 判读是否发送消息
+      underline: false, // 下方聚焦
+      srvCode: null,
+      bor1: false,
+      bor2: false,
+      userInfo: null // 用户信息
+    }
+    methods = {
+      // 处理定时操作
+      sendMsg() {
+        let that = this
+        let time = that.pass_time
+        this.isSending = true
+        this.$apply()
+        interval = setInterval(() => {
+          if (time <= 1) {
+            that.msgText = '发送验证码'
+            that.isSending = false
+            clearInterval(interval)
+            that.$apply()
+            return
+          }
+          time--
+          that.msgText = time + '秒后重新发送'
+          console.log(interval)
+          that.$apply()
+        }, 1000)
+
+        // 这里处理请求之后的数据
+        this.srvCode = '12323'
+        this.$emit('getSrvCode', this.srvCode, this.interval)
+        this.$apply()
+      },
+      focus1() {
+        this.bor1 = true
+        this.$apply()
+      },
+      focus2() {
+        this.bor2 = true
+        this.$apply()
+      },
+      blur1() {
+        this.bor1 = false
+        this.$apply()
+      },
+      blur2() {
+        this.bor2 = false
+        this.$apply()
+      },
+      async login() {
+        if (!this.userInfo) {
+          try {
+            var hasConfirm = await tips.confirm('您已拒绝授权，请授权后再进行登录', '授权')
+          } catch (e) {}
+          if (hasConfirm === 'a') {
+            var srvConfirm = await wepy.openSetting()
+            if (srvConfirm.authSetting['scope.userInfo']) {
+              try {
+                var suserInfo = await wepy.getUserInfo({})
+              } catch (e) {}
+              if (suserInfo) {
+                wepy.setStorageSync(USER_INFO, suserInfo.userInfo)
+                this.userInfo = suserInfo
+                this.$apply()
+              }
+            } else {
+              return false
+            }
+          } else {
+            return false
+          }
+        }
+        // 这一步是写在登录成功的回调里面的 现在要测流程先写了
+        wepy.setStorageSync(LOGIN_CONDITION, true)
+      }
+    }
+    async onLoad() {
+      // 登录
+      let res = await wepy.login()
+      if (res.code) {
+        if (a.userInfo) {
+          wepy.setStorageSync(USER_INFO, a.userInfo)
+          this.userInfo = a
+          this.$apply()
+        }
+      }
+    }
+    // 第一次进入时逻辑
+    // async getAuth() {
+    //   try {
+    //     var userInfo = await wepy.getUserInfo()
+    //   } catch (e) {}
+    //   if (userInfo !== undefined) {
+    //     return userInfo
+    //   } else {
+    //     try {
+    //       var isConfirm = await tips.confirm('您已拒绝授权，请授权后再进行登录', '授权')
+    //     } catch (e) {}
+    //     if (isConfirm === 'a') {
+    //       var resScope = await wepy.openSetting()
+    //       if (resScope.authSetting['scope.userInfo']) {
+    //         try {
+    //           var suserInfo = await wepy.getUserInfo({})
+    //         } catch (e) {}
+    //         if (suserInfo) {
+    //           return suserInfo
+    //         }
+    //       } else {
+    //         return false
+    //       }
+    //     } else {
+    //       return false
+    //     }
+    //   }
+    // }
+    onShow() {
+      clearInterval(interval)
+      this.msgText = '获取验证码'
+      this.isSending = false
+    }
+  }
+</script>

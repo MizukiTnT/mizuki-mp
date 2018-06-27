@@ -1,0 +1,283 @@
+<style lang="less">
+@import '../assets/style/base/base.less';
+  .recharge {
+    height: 100%;
+    .tab-item {
+      position: relative;
+      padding: 15rpx;
+      border-bottom: 1px solid @border-color-sub;
+      .item {
+        width: 50%;
+        text-align: center;
+        display: inline-block;
+        font-size: 16px;
+        &.cur {
+          color: @color-emphasis;
+        }
+      }
+      .underline {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        .line {
+          position: absolute;
+          height: 1px;
+          bottom: 0;
+          background-color: @color-emphasis;
+          transition: all .5s;
+        }
+      }
+    }
+    .swiper-wrapper {
+
+      swiper {
+        .page1 {
+          position: relative;
+          box-sizing: border-box;
+          padding: 0 30rpx;
+          .tolimit {
+            position: absolute;
+            right: 30rpx;
+            font-size: 14px;
+            color: #409eff;
+            line-height: 65rpx;
+          }
+          .button {
+            margin-top: 190rpx;
+          }
+        }
+        .page2 {
+          .card-wrapper {
+            background-color: @border-color-normal;
+            padding: 20rpx 35rpx;
+            .card {
+              position: relative;
+              padding: 30rpx 15rpx;
+              background-color: #409eff;
+              background:-webkit-gradient(linear, top, from(#409eff), to(#b3d8ff));
+              border-radius: 5px;
+              background:-moz-linear-gradient(top, #409eff, #b3d8ff);
+              background:-o-linear-gradient(top,  #409eff, #b3d8ff);
+              >view {
+                margin-bottom: 10rpx;
+                color: #fff;
+                font-size: 12px;
+                &.button {
+                  position: absolute;
+                  right: 15rpx;
+                  top: 50%;
+                  font-size: 15px;
+                  border: 1px solid #fff;
+                  padding: 6rpx 15rpx;
+                  border-radius: 3px;
+                  transform: translateY(-50%);
+                }
+              }
+            }
+          }
+          .explain {
+            padding: 10rpx 20rpx;
+            background-color: #fff;
+            border-bottom: 15rpx solid @border-color-sub;
+            >view {
+              font-size: 11px;
+              letter-spacing: 1px;
+              color: @color-normal;
+            }
+          }
+          .example {
+            .title {
+              position: relative;
+              font-size: 15px;
+              padding: 20rpx 40rpx;
+              border-bottom: 1px solid @border-color-sub;
+              &::before {
+                content: '|';
+                font-size: 15px;
+                color: @color-emphasis;
+                position: absolute;
+                left: 25rpx;
+                top: 18rpx;
+              }
+            }
+            .navi {
+              padding: 0 25rpx;
+              font-size: 14px;
+              navigator {
+                position: relative;
+                padding: 25rpx 10rpx;
+                border-bottom: 1px solid @border-color-sub;
+                image {
+                  position: absolute;
+                  right: 10rpx;
+                  top: 29rpx;
+                  width:14rpx;
+                  height:25rpx;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .button-wrapper {
+      padding: 0 35rpx;
+      .text {
+        margin-top: 15rpx;
+        font-size: 16px;
+        text-align: center;
+        color: @color-sub;
+      }
+      .phone {
+        margin-top: 10rpx;
+        color: @color-emphasis;
+        font-size: 14px;
+        text-align: center;
+      }
+    }    
+  }
+</style>
+
+<template>
+  <view class="recharge">
+    <!-- 切换栏 _S -->
+    <view class="tab-item">
+      <view @tap="swipe('0')" class="item {{cur == 0 ? 'cur' : '' }}">快捷充值</view>
+      <view @tap="swipe('1')" class="item {{cur == 1 ? 'cur' : ''}}">转账充值</view>
+      <view class="underline">
+        <view style="left:{{left}}px;width:{{underlineWidth}}px" class="line"></view>
+      </view>
+    </view>
+    <!-- 切换栏 _E -->
+    <!-- 滑动模块 _S -->
+    <view class="swiper-wrapper">
+      <swiper @change="changeCur" current="{{cur}}" style="height:700rpx">
+        <swiper-item class="page1">
+          <account marb="0" 
+          disabled
+          inputValue="6228481586010073164">
+            <view slot="subtitle" class="subtitle">银行卡号</view>
+          </account>
+          <phone 
+          identity="phone"
+          marb="0"
+          :inputValue="phone"
+          style="color:#fd5353"
+          type="number">
+            <view slot="subtitle" class="subtitle">预留手机</view>
+          </phone>
+          <money
+          identity="money"
+          marb="0" 
+          style="color:#fd5353" 
+          placeholder="请输入充值金额" 
+          type="number">
+            <view slot="subtitle" class="subtitle">充值金额</view>
+          </money>
+          <msg
+          marb="0" 
+          openMsg="true"
+          placeholder="请输入验证码"
+          identity="msgCode">
+            <view slot="subtitle" class="subtitle">短信验证</view>
+          </msg>
+          <navigator class="tolimit" url="">查看银行充值限额</navigator>
+          <button class="button" type="warn">充值</button>
+        </swiper-item>
+        <swiper-item class="page2">
+          <view class="card-wrapper">
+            <view class="card">
+              <view>收款方:</view>
+              <view>收款账号:</view>
+              <view>开户行:</view>
+              <view class="button">复制</view>              
+            </view>
+          </view>
+          <view class="explain">
+            <view>1.您可以通过支付宝、银行柜台、ATM机、网银或手机银行，向您的江西银行存管电子账户转账</view>
+            <view>2.充值后请再账户中同步资金查看资金变化</view>
+          </view>
+          <view class="example">
+            <view class="title">操作示例：</view>
+            <view class="navi">
+              <navigator>
+                <text>支付宝转账</text>
+                <image src="../assets/img/arrow.png"></image>
+              </navigator>
+              <navigator url="">
+                <text>手机银行转账</text>
+                <image src="../assets/img/arrow.png"></image>
+              </navigator>
+            </view>
+          </view>
+        </swiper-item>
+      </swiper>
+    </view>
+    <!-- 滑动模块 _E -->
+    <!-- 按钮块 _S -->
+    <view class="button-wrapper">
+      <view class="text">如果您充值遇到问题请联系客服</view>
+      <view class="phone">400-915-1000</view>
+    </view>
+    <!-- 按钮块 _E -->
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {SYSTEM_INFO} from '../utils/constant'
+  import inputer from '../components/input'
+  export default class charge extends wepy.page {
+    config = {
+      navigationBarTitleText: '充值'
+    }
+    components = {
+      phone: inputer,
+      account: inputer,
+      money: inputer,
+      msg: inputer
+    }
+    data = {
+      cur: '0', // 当前显示页面index
+      underlineWidth: 85, // 下划线宽度
+      left: 0, // 下划线平移距离
+      windowWidth: 0, // 屏幕宽度
+      phone: '17673058233', // 默认手机号
+      money: null, // 输入提现金额
+      msgCode: null // 用户输入的验证码
+    }
+    methods = {
+      swipe(cur) {
+        this.cur = cur
+        this.left = this.cur * this.windowWidth / 2 + (this.windowWidth / 2 - this.underlineWidth) / 2
+        this.$apply()
+      },
+      changeCur(e) {
+        this.cur = e.detail.current
+        this.left = this.cur * this.windowWidth / 2 + (this.windowWidth / 2 - this.underlineWidth) / 2
+        this.$apply()
+      }
+    }
+    events = {
+      getValue(n, id, value) { // 获取相关表单内容
+        if (id === 'phone') {
+          this.phone = value
+        } else if (id === 'money') {
+          this.money = value
+        } else if (id === 'msgCode') {
+          this.msgCode = value
+        }
+        this.$apply()
+      }
+    }
+    async onLoad() {
+      let systemInfo = await wepy.getStorageSync(SYSTEM_INFO)
+      this.windowWidth = systemInfo.windowWidth
+      this.left = this.cur * this.windowWidth / 2 + (this.windowWidth / 2 - this.underlineWidth) / 2
+      console.log(this.left)
+      this.$apply()
+    }
+  }
+</script>

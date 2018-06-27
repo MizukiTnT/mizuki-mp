@@ -1,0 +1,227 @@
+<style lang="less" scoped>
+@import '../assets/style/base/base.less';
+  .cal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.2);
+    .content {
+      width: 80%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      background-color: #fff;
+      border-radius: 5px;
+      .header {
+        position: relative;
+        margin-bottom: 10rpx;
+        padding: 15rpx;
+        font-size: 15px;
+        text-align: center;
+        border-bottom: 1px solid @border-color-sub;
+        .close {
+          width: 40rpx;
+          height: 40rpx;
+          position: absolute;
+          right: 15rpx;
+          top: 18rpx;
+          text-align: center;
+          color: @color-emphasis;
+          font-size: 17px;
+          line-height: 32rpx;
+          border-radius: 50%;
+          background-color: @border-color-normal;
+        }
+      }
+      .input-box {
+        position: relative;
+        margin-top: 20rpx;
+        padding: 0 25rpx;
+        .input {
+          color:#fd5353;
+          border:1px solid @border-color-main;
+          padding:5rpx 30rpx;
+          font-size:14px;
+          border-radius:3px;
+          &.focus {
+            border:1px solid @color-emphasis;
+          }
+        }
+        .unit {
+          position: absolute;
+          top: 12rpx;
+          right: 55rpx;
+          font-size: 14px;
+          &.yuan {
+            color: @color-emphasis;
+          }
+        }
+      }
+      .radios {
+        padding: 25rpx 0;
+        font-size: 15px;        
+        text-align: center;
+        border-bottom: 1px solid @border-color-sub;
+        .dot {
+          margin: 0 25rpx 0 35rpx;
+          padding: 1px;
+          display: inline-block;
+          box-sizing: border-box;
+          width: 30rpx;
+          height: 30rpx;
+          border:1px solid @color-emphasis;
+          border-radius: 50%;
+          .inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
+          &.doted {
+            .inner {
+              background-color: @color-emphasis;
+            }
+          }
+        }
+      }
+      .pre {
+        padding: 15rpx 0;
+        font-size: 15px;
+        text-align: center;
+        .title {
+          margin-right: 35rpx;
+        }
+        .important {
+          color: @color-emphasis;
+        }
+        .hint {
+          color: @color-sub;
+          font-size: 11px;
+        }
+      }
+      .count {
+        padding: 15rpx 0;
+        font-size: 16px;
+        color: #fff;
+        text-align: center;
+        border-radius: 0 0 5px 5px;
+        background-color: @color-emphasis;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="cal" id="wrapper" @tap="close" hidden="{{isHidden}}">
+    <view class="content">
+      <view class="header">
+        <text>利率计算器</text>
+        <view @tap="close" id="close" class="close">x</view>
+      </view>
+      <view class="input-box">
+        <input @blur="getValue('0')" type="number" class="input" placeholder="投标金额"></input>
+        <text class="unit">元</text>
+      </view>
+      <view class="input-box">
+        <input @blur="getValue('1')" type="number" class="input" value="{{percent}}"></input>
+        <text class="unit yuan">%</text>
+      </view>
+      <view class="input-box">
+        <input @blur="getValue('2')" type="number" class="input" value="{{time}}"></input>
+      </view>
+      <view class="radios">
+        <text>期限类型</text>
+        <view @tap="changeInterest('0')" class="dot {{timeType === 'month' ? 'doted' : ''}}">
+          <view class="inner"></view>
+        </view>
+        <text>月</text>
+        <view @tap="changeInterest('1')" class="dot {{timeType === 'month' ? '' : 'doted'}}">
+          <view class="inner"></view>
+        </view>
+        <text>日</text>
+      </view>
+      <view class="pre">
+        <text class="title">预期收益</text>
+        <text class="important">{{plus}}</text>
+        <view class="hint">(已扣除管理费：<text class="important">{{charge}}</text>元)</view>
+      </view>
+      <view @tap="count" class="count">计算</view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tips from '../utils/tips'
+  export default class cal extends wepy.component {
+    props = {
+      profit: {
+        default: 0
+      },
+      time: {
+        default: 0
+      },
+      timeType: {
+        default: 'month'
+      },
+      isHidden: {
+        default: true,
+        twoWay: true
+      }
+    }
+    data = {
+      value: null, // 输入内容
+      plus: 0, // 计算出的结果
+      chargePer: 0.098, // 服务费率
+      charge: 0 // 服务费
+    }
+    computed = {
+      percent() {
+        return parseFloat(this.profit)
+      }
+    }
+    methods = {
+      close(e) { // 关闭计算器
+        if (e.target.id === 'wrapper' || e.target.id === 'close') {
+          this.isHidden = true
+        }
+        this.$apply()
+      },
+      changeInterest(type) { // 选择期限类型
+        if (type === '0') {
+          this.timeType = 'month'
+        } else if (type === '1') {
+          this.timeType = 'day'
+        }
+        this.$apply()
+      },
+      count() { // 计算结果
+        if (!this.value || !this.profit || !this.time) {
+          tips.alert('信息未输入完全')
+          return
+        }
+        let time
+        if (this.timeType === 'month') {
+          time = this.time / 12
+        } else {
+          time = this.time / 12 / 30
+        }
+        this.plus = ((time * this.value * parseFloat(this.profit) / 100) * (1 - this.chargePer)).toFixed(2)
+        this.charge = ((time * this.value * parseFloat(this.profit) / 100) * this.chargePer).toFixed(2)
+        this.$apply()
+      },
+      getValue(type, e) { // 赋值
+        if (type === '0') {
+          this.value = e.detail.value
+        } else if (type === '1') {
+          this.profit = e.detail.value
+        } else if (type === '2') {
+          this.time = e.detail.value
+        }
+        this.$apply()
+      }
+    }
+  }
+</script>
